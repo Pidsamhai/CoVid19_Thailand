@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="@drawable/ic_today"
+        android:id="@+id/todayFragment"
+        android:title="Today" />
+    <item
+        android:icon="@drawable/ic_timeline"
+        android:id="@+id/timeLineFragment"
+        android:title="Time Line"/>
+</menu>
