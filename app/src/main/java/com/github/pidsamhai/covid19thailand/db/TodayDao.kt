@@ -12,9 +12,9 @@ interface TodayDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upSert(todayDao: Today):Long?
 
-    @Query("SELECT * FROM today LIMIT 1")
+    @Query("SELECT * FROM today ORDER BY updateDate DESC LIMIT 1")
     fun getToDay() : LiveData<Today>
 
-    @Query("SELECT * FROM today LIMIT 1")
+    @Query("SELECT * FROM today ORDER BY updateDate DESC LIMIT 1")
     fun hashData() : Today?
 }

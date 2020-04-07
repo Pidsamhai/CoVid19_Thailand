@@ -2,38 +2,32 @@ package com.github.pidsamhai.covid19thailand.ui.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.github.pidsamhai.covid19thailand.R
-import com.github.pidsamhai.covid19thailand.db.CovidDatabase
-import com.github.pidsamhai.covid19thailand.db.TodayDao
-import com.github.pidsamhai.covid19thailand.network.api.Covid19ApiServices
-import com.github.pidsamhai.covid19thailand.repository.CoVidRepository
+import com.github.pidsamhai.covid19thailand.network.response.Today
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.ToDayViewModel
-import com.github.pidsamhai.covid19thailand.ui.viewmodel.ToDayViewModelFactory
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.android.synthetic.main.fragment_today.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 @Suppress("CAST_NEVER_SUCCEEDS")
 class TodayFragment : Fragment() {
 
-    private lateinit var viewModel: ToDayViewModel
-    private lateinit var coVidRepository: CoVidRepository
-    private lateinit var todayDao: TodayDao
-    private lateinit var apiServices: Covid19ApiServices
+    private val viewModel: ToDayViewModel by viewModel()
     private lateinit var materialToolbar: MaterialToolbar
+    private lateinit var _cacheToday: Today
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_today, container, false)
     }
 
@@ -41,38 +35,50 @@ class TodayFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        materialToolbar =  (activity as AppCompatActivity).findViewById(R.id.materialToolbar)
+        viewModel.today.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Log.e("onActivityCreated: ", "Trigger")
+                _cacheToday = it
+                updateUI(it)
+            }
+            refreshLayout.isRefreshing = false
+        })
 
-        apiServices = Covid19ApiServices.invoke()
-        context?.let {
-            todayDao = CovidDatabase.getInstance(it).todayDao()
-            coVidRepository = CoVidRepository.getInstance(todayDao, apiServices)
-            viewModel = ViewModelProvider(
-                this,
-                ToDayViewModelFactory(coVidRepository)
-            ).get(ToDayViewModel::class.java)
-            viewModel.today.observe(viewLifecycleOwner, Observer {
-                it.let {
 
-                    materialToolbar.subtitle = lastUpdate(it.updateDate)
-                    conFirmed.text = it.confirmed.toString()
-                    newConFirmed.text = newS(it.newConfirmed)
+        materialToolbar = (activity as AppCompatActivity).findViewById(R.id.materialToolbar)
 
-                    hospitalized.text = it.hospitalized.toString()
-                    newHospitalized.text =  if (it.newHospitalized!! > 0) "( เพิ่มขึ้น ${it.newHospitalized} )" else ""
-
-                    recovered.text = it.recovered.toString()
-                    newRecovered.text = newS(it.newRecovered)
-                }
-            })
+        refreshLayout.setOnRefreshListener {
+            viewModel.refresh()
         }
+    }
+
+    private fun updateUI(today: Today) {
+        conFirmed.text = today.confirmed.toString()
+        newConFirmed.text = newS(today.newConfirmed)
+
+        hospitalized.text = today.hospitalized.toString()
+        newHospitalized.text =
+            if (today.newHospitalized!! > 0) "( เพิ่มขึ้น ${today.newHospitalized} )" else ""
+
+        recovered.text = today.recovered.toString()
+        newRecovered.text = newS(today.newRecovered)
+
+        deaths.text = today.deaths.toString()
+        newDeaths.text = newS(today.newDeaths)
+        materialToolbar.subtitle = lastUpdate(today.updateDate)
     }
 
     private fun newS(data: Int?): String {
         return "( เพิ่มขึ้น $data )"
     }
 
-    private fun lastUpdate(data: String) : String{
+    private fun lastUpdate(data: String): String {
         return "( อัพเดทล่าสุด $data)"
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.e("onSaveInstanceState: ", "On Save")
+    }
+
 }

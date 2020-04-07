@@ -9,10 +9,9 @@ import java.lang.reflect.Type
 class TypeConverter {
     @TypeConverter
     fun fromString(value: String): List<Data> {
-        val listType: Type = object : TypeToken<ArrayList<String>>() {}.type
+        val listType: Type = object : TypeToken<ArrayList<Data>>() {}.type
         return Gson().fromJson(value, listType)
     }
-
     @TypeConverter
     fun fromList(list: List<Data>):String {
         return Gson().toJson(list)

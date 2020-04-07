@@ -20,7 +20,7 @@ interface Covid19ApiServices {
     fun getToDayNomal() : Call<Today>?
 
     @GET("timeline")
-    fun getTimeline() : LiveData<TimeLine>
+    fun getTimeline() : Call<TimeLine>?
 
     companion object {
         operator fun invoke(

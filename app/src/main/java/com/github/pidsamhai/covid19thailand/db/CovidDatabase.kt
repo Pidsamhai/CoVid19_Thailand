@@ -15,6 +15,7 @@ import com.github.pidsamhai.covid19thailand.utilities.DATABASE_NAME
 @TypeConverters(TypeConverter::class)
 abstract class CovidDatabase : RoomDatabase(){
     abstract fun todayDao():TodayDao
+    abstract  fun timeLineDao():TimeLineDao
 
     companion object {
         @Volatile private var instance:CovidDatabase? = null
