@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand.db
+package com.github.pidsamhai.covid19thailand.db.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

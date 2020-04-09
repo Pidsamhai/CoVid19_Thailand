@@ -7,22 +7,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.github.pidsamhai.covid19thailand.R
 import com.github.pidsamhai.covid19thailand.network.response.Today
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.ToDayViewModel
+import com.github.pidsamhai.covid19thailand.utilities.lastUpdate
+import com.github.pidsamhai.covid19thailand.utilities.newS
+import com.github.pidsamhai.covid19thailand.utilities.toToday
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.android.synthetic.main.fragment_today.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.android.synthetic.main.layout_static.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 @Suppress("CAST_NEVER_SUCCEEDS")
-class TodayFragment : Fragment() {
+class TodayFragment : BaseFragment() {
 
-    private val viewModel: ToDayViewModel by viewModel()
+    private val viewModel: ToDayViewModel by sharedViewModel()
+    private var cache: String? = null
+
     private lateinit var materialToolbar: MaterialToolbar
-    private lateinit var _cacheToday: Today
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,17 +39,24 @@ class TodayFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.today.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                Log.e("onActivityCreated: ", "Trigger")
-                _cacheToday = it
-                updateUI(it)
-            }
-            refreshLayout.isRefreshing = false
-        })
-
-
         materialToolbar = (activity as AppCompatActivity).findViewById(R.id.materialToolbar)
+        materialToolbar.title = "Covid 19 Today"
+
+        if (viewModel.cache != null) {
+            Log.e("CACHE","DETECTED")
+            val today = viewModel.cache!!.toToday()
+            cache = today.toGsonString()
+            updateUI(today)
+        } else {
+            viewModel.today.observe(viewLifecycleOwner, Observer {
+                it?.let {
+                    Log.e("onActivityCreated: ", "Fetch Data")
+                    cache = it.toGsonString()
+                    updateUI(it)
+                }
+                refreshLayout.isRefreshing = false
+            })
+        }
 
         refreshLayout.setOnRefreshListener {
             viewModel.refresh()
@@ -53,6 +64,7 @@ class TodayFragment : Fragment() {
     }
 
     private fun updateUI(today: Today) {
+        Log.e("updateUI: ", "YEAH!!!!!!!!!")
         conFirmed.text = today.confirmed.toString()
         newConFirmed.text = newS(today.newConfirmed)
 
@@ -68,17 +80,13 @@ class TodayFragment : Fragment() {
         materialToolbar.subtitle = lastUpdate(today.updateDate)
     }
 
-    private fun newS(data: Int?): String {
-        return "( เพิ่มขึ้น $data )"
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.cache = cache
     }
 
-    private fun lastUpdate(data: String): String {
-        return "( อัพเดทล่าสุด $data)"
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Log.e("onSaveInstanceState: ", "On Save")
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
 }

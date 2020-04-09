@@ -1,31 +1,35 @@
 package com.github.pidsamhai.covid19thailand.network.api
 
-import androidx.lifecycle.LiveData
-import com.github.pidsamhai.covid19thailand.network.response.TimeLine
-import com.github.pidsamhai.covid19thailand.network.response.Today
+import com.github.pidsamhai.covid19thailand.network.response.rapid.country.Countries
+import com.github.pidsamhai.covid19thailand.network.response.rapid.fuckyou.Static
+import com.github.pidsamhai.covid19thailand.network.response.rapid.hell.Statics
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
-private const val BASE_URL = "https://covid19.th-stat.com/api/open/"
+private const val BASE_URL = "https://covid-193.p.rapidapi.com/"
+private const val apiKey = "" // Your Api Key
+private const val apiHost = "covid-193.p.rapidapi.com"
 
-interface Covid19ApiServices {
-    @GET("today")
-    fun getToDay() : LiveData<Today>
+interface CoVid19RapidApiServices {
+//    @GET("history")
+//    fun getHistory(): Call<Any>
+//
+    @GET("countries")
+    suspend fun getContiresName(): Countries
 
-    @GET("today")
-    fun getToDayNomal() : Call<Today>?
+    @GET("statistics")
+    suspend fun getStatics(): Statics
 
-    @GET("timeline")
-    fun getTimeline() : Call<TimeLine>?
+    @GET("statistics")
+    suspend fun getStatic(@Query("country")country:String) : Static
+
 
     companion object {
-        operator fun invoke(
-            //connectivityInterceptor: ConnectivityInterceptor
-        ): Covid19ApiServices {
+        operator fun invoke(): CoVid19RapidApiServices {
             val requestInterceptor = Interceptor { chain ->
 
                 val url = chain.request()
@@ -34,6 +38,8 @@ interface Covid19ApiServices {
                     .build()
                 val request = chain.request()
                     .newBuilder()
+                    .header("x-rapidapi-host", apiHost)
+                    .header("x-rapidapi-key", apiKey)
                     .url(url)
                     .build()
 
@@ -42,7 +48,6 @@ interface Covid19ApiServices {
 
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
-//                .addInterceptor(connectivityInterceptor)
                 .build()
 
             return Retrofit.Builder()
@@ -50,8 +55,7 @@ interface Covid19ApiServices {
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(Covid19ApiServices::class.java)
+                .create(CoVid19RapidApiServices::class.java)
         }
-
     }
 }

@@ -15,4 +15,14 @@
         android:name="com.github.pidsamhai.covid19thailand.ui.fragment.TimeLineFragment"
         android:label="fragment_time_line"
         tools:layout="@layout/fragment_time_line" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.github.pidsamhai.covid19thailand.ui.fragment.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/worldWideFragment"
+        android:name="com.github.pidsamhai.covid19thailand.ui.fragment.WorldWideFragment"
+        android:label="fragment_world_wide"
+        tools:layout="@layout/fragment_world_wide" />
 </navigation>

@@ -8,4 +8,12 @@
         android:icon="@drawable/ic_timeline"
         android:id="@+id/timeLineFragment"
         android:title="Time Line"/>
+    <item
+        android:icon="@drawable/ic_world_wide"
+        android:id="@+id/worldWideFragment"
+        android:title="World"/>
+    <item
+        android:icon="@drawable/ic_update"
+        android:id="@+id/aboutFragment"
+        android:title="About"/>
 </menu>

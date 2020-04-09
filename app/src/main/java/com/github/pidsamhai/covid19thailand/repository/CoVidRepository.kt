@@ -5,8 +5,8 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.github.pidsamhai.covid19thailand.AppExecutors
-import com.github.pidsamhai.covid19thailand.db.TimeLineDao
-import com.github.pidsamhai.covid19thailand.db.TodayDao
+import com.github.pidsamhai.covid19thailand.db.dao.TimeLineDao
+import com.github.pidsamhai.covid19thailand.db.dao.TodayDao
 import com.github.pidsamhai.covid19thailand.network.api.Covid19ApiServices
 import com.github.pidsamhai.covid19thailand.network.response.TimeLine
 import com.github.pidsamhai.covid19thailand.network.response.Today
@@ -19,6 +19,8 @@ import java.io.IOException
 
 class CoVidRepository(private val todayDao: TodayDao, private val timeLineDao: TimeLineDao, private val apiServices: Covid19ApiServices) {
     private val executor = AppExecutors()
+
+    val timeLineDatas = timeLineDao.getDatas()
 
     fun getToDay(): LiveData<Today> {
         executor.networkIO().execute {
@@ -66,25 +68,14 @@ class CoVidRepository(private val todayDao: TodayDao, private val timeLineDao: T
     private fun refreshTimeline() {
         try {
             val response = apiServices.getTimeline()?.execute()?.body()
-            if (response != null) {
-                timeLineDao.upSert(response)
+            if (response?.data != null) {
+                timeLineDao.apply {
+                    upSert(response)
+                    upSertDatas(response.data)
+                }
             }
         } catch (e: IOException) {
             Log.e("API", "" + e.message)
         }
     }
-
-//    companion object {
-//        @Volatile
-//        private var instance: CoVidRepository? = null
-//        fun getInstance(todayDao: TodayDao,apiServices: Covid19ApiServices) = instance
-//            ?: synchronized(this) {
-//                instance
-//                    ?: CoVidRepository(
-//                        todayDao,
-//                        apiServices
-//                    )
-//                        .also { instance = it }
-//            }
-//    }
 }

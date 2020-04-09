@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.TimeLineFragment">
 
     <LinearLayout
@@ -13,18 +14,9 @@
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_height="250dp" />
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barChart"
-            android:layout_width="match_parent"
-            android:layout_height="300dp" />
 
-        <com.anychart.AnyChartView
-            android:visibility="gone"
-            android:id="@+id/anyChart"
-            android:layout_width="match_parent"
-            android:layout_height="300dp" />
     </LinearLayout>
 
 
