@@ -1,7 +1,8 @@
-package com.github.pidsamhai.covid19thailand.network.response
+package com.github.pidsamhai.covid19thailand.network.response.ddc
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "today")
@@ -31,4 +32,8 @@ data class Today(
     @PrimaryKey
     @SerializedName("UpdateDate")
     val updateDate: String
-)
+){
+    fun toGsonString() : String {
+        return Gson().toJson(this)
+    }
+}
