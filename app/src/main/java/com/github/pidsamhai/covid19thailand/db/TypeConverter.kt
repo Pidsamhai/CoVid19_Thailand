@@ -1,9 +1,8 @@
 package com.github.pidsamhai.covid19thailand.db
 
 import androidx.room.TypeConverter
-import com.github.pidsamhai.covid19thailand.network.response.Data
-import com.github.pidsamhai.covid19thailand.network.response.rapid.fuckyou.*
-import com.github.pidsamhai.covid19thailand.network.response.rapid.hell.Response
+import com.github.pidsamhai.covid19thailand.network.response.ddc.Data
+import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
@@ -19,12 +18,12 @@ class TypeConverter {
         return Gson().toJson(list)
     }
     @TypeConverter
-    fun fromStringResponse(value: String): List<Response> {
-        val listType: Type = object : TypeToken<List<Response>>() {}.type
+    fun fromStringResponse(value: String): List<Datas> {
+        val listType: Type = object : TypeToken<List<Datas>>() {}.type
         return Gson().fromJson(value, listType)
     }
     @TypeConverter
-    fun fromListResponse(list: List<Response>):String {
+    fun fromListResponse(list: List<Datas>):String {
         return Gson().toJson(list)
     }
     @TypeConverter

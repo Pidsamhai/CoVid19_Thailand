@@ -13,4 +13,3 @@
 .externalNativeBuild
 .cxx
 /.idea
-/app/src/main/java/com/github/pidsamhai/covid19thailand/network/api/CoVid19RapidApiServices.kt

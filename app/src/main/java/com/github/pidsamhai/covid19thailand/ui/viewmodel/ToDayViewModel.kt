@@ -1,14 +1,14 @@
 package com.github.pidsamhai.covid19thailand.ui.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.github.pidsamhai.covid19thailand.network.response.Today
-import com.github.pidsamhai.covid19thailand.repository.CoVidRepository
+import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
+import com.github.pidsamhai.covid19thailand.repository.CoVidDDCRepository
+import timber.log.Timber
 
 class ToDayViewModel(
-    private val coVidRepository: CoVidRepository,
+    private val coVidDDCRepository: CoVidDDCRepository,
     private val state: SavedStateHandle
 ) : ViewModel() {
     var cache: String?
@@ -17,10 +17,10 @@ class ToDayViewModel(
             state.set(STATE, value)
         }
 
-    val today: LiveData<Today> = coVidRepository.getToDay()
+    val today: MutableLiveData<Today> = coVidDDCRepository.today
 
     fun refresh() {
-        coVidRepository.refreshToday()
+        coVidDDCRepository.fetchTodayData()
     }
 
     companion object {
@@ -29,6 +29,6 @@ class ToDayViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        Log.e("onCleared: ", "Good bye")
+        Timber.e("Good bye")
     }
 }

@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand.ui
+package com.github.pidsamhai.covid19thailand.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -18,7 +18,6 @@ class CustomSpinnerAdapter(context: Context, string: List<String>) :
         return this.createView(position, recycledView, parent)
 
     }
-
 
     override fun getDropDownView(position: Int, recycledView: View?, parent: ViewGroup): View {
 

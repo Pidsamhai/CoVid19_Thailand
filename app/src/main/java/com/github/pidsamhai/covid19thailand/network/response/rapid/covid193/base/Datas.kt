@@ -1,15 +1,13 @@
-package com.github.pidsamhai.covid19thailand.network.response.rapid.hell
+package com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base
 
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.github.pidsamhai.covid19thailand.network.response.rapid.fuckyou.Cases
-import com.github.pidsamhai.covid19thailand.network.response.rapid.fuckyou.Deaths
-import com.github.pidsamhai.covid19thailand.network.response.rapid.fuckyou.Tests
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "rapid_statics")
-data class Response(
+data class Datas(
     @SerializedName("cases")
     val cases: Cases?,
     @SerializedName("country")
@@ -25,4 +23,7 @@ data class Response(
 ) {
     @PrimaryKey(autoGenerate = false)
     var responsePk: String = "statics_pk"
+    fun toGsonString() : String {
+        return Gson().toJson(this)
+    }
 }

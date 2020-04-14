@@ -3,17 +3,17 @@
     <item
         android:icon="@drawable/ic_today"
         android:id="@+id/todayFragment"
-        android:title="Today" />
+        android:title="@string/today" />
     <item
         android:icon="@drawable/ic_timeline"
         android:id="@+id/timeLineFragment"
-        android:title="Time Line"/>
+        android:title="@string/time_line"/>
     <item
         android:icon="@drawable/ic_world_wide"
         android:id="@+id/worldWideFragment"
-        android:title="World"/>
+        android:title="@string/world"/>
     <item
         android:icon="@drawable/ic_update"
         android:id="@+id/aboutFragment"
-        android:title="About"/>
+        android:title="@string/about"/>
 </menu>

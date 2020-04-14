@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand.network.response
+package com.github.pidsamhai.covid19thailand.network.response.ddc
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

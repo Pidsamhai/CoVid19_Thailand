@@ -2,9 +2,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/ibm_plex</item>
         <item name="colorPrimary">@android:color/black</item>
         <item name="colorPrimaryDark">#212121</item>
         <item name="colorAccent">@android:color/darker_gray</item>
     </style>
-
 </resources>

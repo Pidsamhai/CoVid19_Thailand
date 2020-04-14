@@ -5,9 +5,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.github.pidsamhai.covid19thailand.network.response.Data
-import com.github.pidsamhai.covid19thailand.network.response.TimeLine
-import com.github.pidsamhai.covid19thailand.network.response.Today
+import com.github.pidsamhai.covid19thailand.network.response.ddc.Data
+import com.github.pidsamhai.covid19thailand.network.response.ddc.TimeLine
 
 @Dao
 interface TimeLineDao {
@@ -21,6 +20,5 @@ interface TimeLineDao {
     fun getTimeLine() : LiveData<TimeLine>
 
     @Query("SELECT * FROM timeline_data ORDER BY date DESC LIMIT 50")
-//    @Query("SELECT * FROM timeline_data ")
     fun getDatas() : LiveData<List<Data>>
 }

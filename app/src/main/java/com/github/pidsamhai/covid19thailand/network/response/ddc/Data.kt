@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand.network.response
+package com.github.pidsamhai.covid19thailand.network.response.ddc
 
 
 import androidx.room.Entity
@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.google.gson.annotations.SerializedName
+import timber.log.Timber
 import java.io.Serializable
 
 @Entity(tableName = "timeline_data")
@@ -59,8 +60,13 @@ fun List<Data>.toLineDataSet(): CoVidDataSets {
         recovered.add(BarEntry(indies, data.recovered!!.toFloat()))
         date.add(data.date.substring(0, data.date.length - 2))
     }
-//    Log.e("toDataset: ", "${confirmed.size}")
-    return CoVidDataSets(confirmed, death, recovered, date)
+    Timber.e("${confirmed.size}")
+    return CoVidDataSets(
+        confirmed,
+        death,
+        recovered,
+        date
+    )
 }
 
 fun List<Data>.toBarDataSet(): CoVidDataSets {
@@ -76,6 +82,11 @@ fun List<Data>.toBarDataSet(): CoVidDataSets {
             date.add(data.date)
         }
     }
-//    Log.e("toDataset: ", "${confirmed.size}")
-    return CoVidDataSets(confirmed, death, recovered, date)
+    Timber.e("${confirmed.size}")
+    return CoVidDataSets(
+        confirmed,
+        death,
+        recovered,
+        date
+    )
 }

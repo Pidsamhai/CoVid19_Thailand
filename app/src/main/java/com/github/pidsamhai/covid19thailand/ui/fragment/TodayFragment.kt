@@ -2,14 +2,13 @@ package com.github.pidsamhai.covid19thailand.ui.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.github.pidsamhai.covid19thailand.R
-import com.github.pidsamhai.covid19thailand.network.response.Today
+import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.ToDayViewModel
 import com.github.pidsamhai.covid19thailand.utilities.lastUpdate
 import com.github.pidsamhai.covid19thailand.utilities.newS
@@ -18,6 +17,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.android.synthetic.main.fragment_today.*
 import kotlinx.android.synthetic.main.layout_static.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 
 
 @Suppress("CAST_NEVER_SUCCEEDS")
@@ -40,31 +40,32 @@ class TodayFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         materialToolbar = (activity as AppCompatActivity).findViewById(R.id.materialToolbar)
-        materialToolbar.title = "Covid 19 Today"
+        materialToolbar.title = resources.getString(R.string.covid_today)
+
+        viewModel.today.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                refreshLayout.isRefreshing = false
+                Timber.e("Fetch Data")
+                cache = it.toGsonString()
+                updateUI(it)
+            }
+        })
 
         if (viewModel.cache != null) {
-            Log.e("CACHE","DETECTED")
+            Timber.e("CACHE DETECTED")
             val today = viewModel.cache!!.toToday()
             cache = today.toGsonString()
             updateUI(today)
         } else {
-            viewModel.today.observe(viewLifecycleOwner, Observer {
-                it?.let {
-                    Log.e("onActivityCreated: ", "Fetch Data")
-                    cache = it.toGsonString()
-                    updateUI(it)
-                }
-                refreshLayout.isRefreshing = false
-            })
+            viewModel.refresh()
         }
-
         refreshLayout.setOnRefreshListener {
             viewModel.refresh()
         }
     }
 
     private fun updateUI(today: Today) {
-        Log.e("updateUI: ", "YEAH!!!!!!!!!")
+        Timber.e("YEAH!!!!!!!!!")
         conFirmed.text = today.confirmed.toString()
         newConFirmed.text = newS(today.newConfirmed)
 
@@ -83,10 +84,6 @@ class TodayFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.cache = cache
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
 }

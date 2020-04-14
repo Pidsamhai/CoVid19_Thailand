@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.github.pidsamhai.covid19thailand.network.response.Today
+import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
 
 @Dao
 interface TodayDao {

@@ -2,42 +2,46 @@ package com.github.pidsamhai.covid19thailand.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.github.pidsamhai.covid19thailand.db.dao.CountriesDao
-import com.github.pidsamhai.covid19thailand.db.dao.StaticDao
+import com.github.pidsamhai.covid19thailand.db.dao.RapidDao
 import com.github.pidsamhai.covid19thailand.db.network.NetWorkDataSource
-import com.github.pidsamhai.covid19thailand.network.response.rapid.country.Countries
-import com.github.pidsamhai.covid19thailand.network.response.rapid.fuckyou.Static
-import com.github.pidsamhai.covid19thailand.network.response.rapid.hell.Response
+import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
+import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base.Datas
+import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.history.History
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
+@Suppress("FunctionName")
 class RapidRepositoryImpl(
-    private val staticDao: StaticDao,
-    private val countriesDao: CountriesDao,
+    private val rapidDao: RapidDao,
     private val netWorkDataSource: NetWorkDataSource
 ) : RapidRepository {
 
     private val _cacheCountries: MutableLiveData<List<String>> = MutableLiveData()
-    private val _cacheStatic: MutableLiveData<Response> = MutableLiveData()
+    private val _cacheStatic: MutableLiveData<Datas> = MutableLiveData()
+    private val _cacheHistories: MutableLiveData<List<History>> = MutableLiveData()
 
     override val countries: MutableLiveData<List<String>>
         get() = _cacheCountries
 
-    override val static: MutableLiveData<Response>
+    override val static: MutableLiveData<Datas>
         get() = _cacheStatic
 
+    override val histories: MutableLiveData<List<History>>
+        get() = _cacheHistories
+
     init {
+
         netWorkDataSource.downloadStatic.observeForever {
             it?.let {
                 roomPersistence(it)
             }
         }
-        netWorkDataSource.downloadCountries.observeForever {
+
+        netWorkDataSource.downloadHistory.observeForever {
             it?.let {
-                roomPersistence(it)
+                historyPersistence(it.second, it.first)
             }
         }
 
@@ -47,22 +51,13 @@ class RapidRepositoryImpl(
             }
         }
 
-        staticDao.getCountries().observeForever {
+        rapidDao.getCountries().observeForever {
             it?.let {
                 _cacheCountries.postValue(it)
             }
         }
 
-//        staticDao.getStatic().observeForever {
-//            it?.let {
-//                _cacheStatic.postValue(it)
-//            }
-//        }
-
-        GlobalScope.launch(Dispatchers.IO) {
-//            _fetchCountries()
-            _fetchStatics()
-        }
+        fetchStaticsData()
     }
 
     private fun roomPersistence(data: Any) {
@@ -72,37 +67,35 @@ class RapidRepositoryImpl(
                     data.parameters?.country?.let {
                         data.pk = it
                     }
-                    staticDao.upSert(data)
-                }
-                is Countries -> {
-                    countriesDao.upSert(data)
+                    rapidDao.upSert(data)
                 }
                 else -> {
                     @Suppress("UNCHECKED_CAST")
-                    staticDao.upSertStatics(data as List<Response>)
+                    rapidDao.upSertStatics(data as List<Datas>)
                 }
             }
         }
     }
 
-    private suspend fun _fetchCountries() {
-        netWorkDataSource.fetchCountires()
-    }
-
-    override suspend fun fetchCountries() {
-        _fetchCountries()
-    }
-
-    private suspend fun fetchStatic(country: String) {
-        netWorkDataSource.fetchStatic(country)
-    }
-
-    override fun getStatic(country: String) {
+    private fun historyPersistence(country: String, history: List<History>) {
         GlobalScope.launch(Dispatchers.IO) {
-            val _temp = staticDao.getStatics(country).value
-            _temp?.let {
-                _cacheStatic.postValue(it)
-            }
+            rapidDao.dropHistory(country)
+            rapidDao.upSertHistories(history)
+        }
+    }
+
+    private suspend fun _fetchHistories(country: String) {
+        netWorkDataSource.fetchHistories(country)
+    }
+
+    override suspend fun fetchHistories(country: String) {
+        _fetchHistories(country)
+    }
+
+
+    override fun fetchStaticsData() {
+        GlobalScope.launch(Dispatchers.IO) {
+            _fetchStatics()
         }
     }
 
@@ -110,10 +103,16 @@ class RapidRepositoryImpl(
         netWorkDataSource.fetchStatics()
     }
 
-    override suspend fun getStatic2(country: String): LiveData<out Static> {
-        return withContext(Dispatchers.IO){
-            fetchStatic(country)
-            return@withContext staticDao.getStaticReal(country)
+    override suspend fun getStatic(country: String): LiveData<out Datas> {
+        return withContext(Dispatchers.IO) {
+            return@withContext rapidDao.getStatic(country)
+        }
+    }
+
+    override suspend fun getHistory(country: String): LiveData<out List<History>> {
+        return withContext(Dispatchers.IO) {
+            _fetchHistories(country)
+            return@withContext rapidDao.getHistory(country)
         }
     }
 }
