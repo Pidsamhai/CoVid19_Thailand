@@ -49,7 +49,7 @@ jobs:
           echo $KEY_PROPERTIES > out.properties
           base64 -di out.properties > key.properties
         env:
-          KEY_STORE: ${{ secrets.KEY_PROPERTIES }}
+          KEY_PROPERTIES: ${{ secrets.KEY_PROPERTIES }}
 
       # create native-lib.cpp
       - name: Create native-lib.cpp
