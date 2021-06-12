@@ -1,43 +1,30 @@
 package com.github.pidsamhai.covid19thailand.network.api
 
-import androidx.lifecycle.LiveData
 import com.github.pidsamhai.covid19thailand.network.response.ddc.TimeLine
 import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import retrofit2.Call
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-private const val BASE_URL = "https://covid19.th-stat.com/api/open/"
+private const val BASE_URL = "http://covid19.th-stat.com/json/covid19v2/"
 
 interface Covid19ApiServices {
-    @GET("today")
+    @GET("getTodayCases.json")
     suspend fun getToDay() : Today
 
-    @GET("timeline")
+    @GET("getTimeline.json")
     suspend fun getTimeline() : TimeLine
 
     companion object {
         fun create(): Covid19ApiServices {
-            val requestInterceptor = Interceptor { chain ->
-
-                val url = chain.request()
-                    .url()
-                    .newBuilder()
-                    .build()
-                val request = chain.request()
-                    .newBuilder()
-                    .url(url)
-                    .build()
-
-                return@Interceptor chain.proceed(request)
-            }
-
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(requestInterceptor)
+                .addNetworkInterceptor(HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                })
                 .build()
+
 
             return Retrofit.Builder()
                 .client(okHttpClient)

@@ -25,10 +25,6 @@ data class Today(
     val newRecovered: Int?,
     @SerializedName("Recovered")
     val recovered: Int?,
-    @SerializedName("SeverBy")
-    val severBy: String?,
-    @SerializedName("Source")
-    val source: String?,
     @PrimaryKey
     @SerializedName("UpdateDate")
     val updateDate: String

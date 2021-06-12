@@ -15,36 +15,40 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.pidsamhai.covid19thailand.R
+import com.github.pidsamhai.covid19thailand.databinding.FragmentTimeLineBinding
 import com.github.pidsamhai.covid19thailand.network.response.ddc.CoVidDataSets
 import com.github.pidsamhai.covid19thailand.network.response.ddc.toLineDataSet
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.TimeLineViewModel
 import com.github.pidsamhai.covid19thailand.utilities.StringForMetter
 import com.github.pidsamhai.covid19thailand.utilities.lastUpdate
 import com.google.android.material.appbar.MaterialToolbar
-import kotlinx.android.synthetic.main.fragment_time_line.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 
-@Suppress( "UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST")
 class TimeLineFragment : Fragment() {
 
     private lateinit var materialToolbar: MaterialToolbar
     private val viewModel: TimeLineViewModel by viewModel()
+    private lateinit var _binding: FragmentTimeLineBinding
+    private val binding: FragmentTimeLineBinding
+        get() = _binding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_time_line, container, false)
+    ): View {
+        _binding = FragmentTimeLineBinding.inflate(inflater, container, false)
+        return _binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
         materialToolbar = (activity as AppCompatActivity).findViewById(R.id.materialToolbar)
         materialToolbar.title = resources.getString(R.string.covid_timeline)
 
-        viewModel.timeline.observe(viewLifecycleOwner, Observer {
+        viewModel.timeline.observe(viewLifecycleOwner, {
             it?.let {
                 materialToolbar.subtitle = lastUpdate(it.updateDate)
             }
@@ -58,11 +62,11 @@ class TimeLineFragment : Fragment() {
                 setLineChart(a)
             }
         })
-
     }
 
 
     private fun setLineChart(sets: CoVidDataSets) {
+        val lineChart = binding.lineChart
         try {
             Timber.e("Update Data")
             val dataSets: ArrayList<ILineDataSet> = ArrayList()

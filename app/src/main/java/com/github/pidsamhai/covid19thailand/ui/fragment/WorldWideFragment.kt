@@ -16,26 +16,21 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.pidsamhai.covid19thailand.R
+import com.github.pidsamhai.covid19thailand.databinding.FragmentWorldWideBinding
+import com.github.pidsamhai.covid19thailand.databinding.LayoutStaticBinding
 import com.github.pidsamhai.covid19thailand.network.response.ddc.CoVidDataSets
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base.Datas
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.history.History
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.history.toLineDataSet
 import com.github.pidsamhai.covid19thailand.ui.adapter.CustomSpinnerAdapter
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.WorldWideModel
-import com.github.pidsamhai.covid19thailand.utilities.StringForMetter
-import com.github.pidsamhai.covid19thailand.utilities.addEmptyFirst
-import com.github.pidsamhai.covid19thailand.utilities.lastUpdate
-import com.github.pidsamhai.covid19thailand.utilities.toDatas
-import com.github.pidsamhai.gitrelease.GitRelease
+import com.github.pidsamhai.covid19thailand.utilities.*
 import com.google.android.material.appbar.MaterialToolbar
-import kotlinx.android.synthetic.main.fragment_world_wide.*
-import kotlinx.android.synthetic.main.layout_static.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
-import java.text.NumberFormat
 
 
 class WorldWideFragment : Fragment(), AdapterView.OnItemSelectedListener {
@@ -46,22 +41,29 @@ class WorldWideFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var _cachePosition: Int = 0
     private var _cacheDatas: Datas? = null
     private lateinit var adapter: CustomSpinnerAdapter
+    private lateinit var _binding: FragmentWorldWideBinding
+    private lateinit var _contentBinding: LayoutStaticBinding
+    private val binding: FragmentWorldWideBinding
+        get() = _binding
+    private val contentBinding: LayoutStaticBinding
+        get() = _contentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_world_wide, container, false)
+    ): View {
+        _binding = FragmentWorldWideBinding.inflate(inflater, container, false)
+        _contentBinding = LayoutStaticBinding.bind(_binding.root)
+        return _binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
         materialToolbar = (activity as AppCompatActivity).findViewById(R.id.materialToolbar)
         materialToolbar.title = resources.getString(R.string.covid_world_wide)
         materialToolbar.subtitle = ""
         adapter = CustomSpinnerAdapter(activity as AppCompatActivity, mutableListOf())
-        country.adapter = adapter
+        binding.country.adapter = adapter
 
         initObserve()
 
@@ -72,25 +74,24 @@ class WorldWideFragment : Fragment(), AdapterView.OnItemSelectedListener {
             _cacheDatas = viewModel.cacheDatas?.toDatas()
             _cachePosition = viewModel.cachePosition!!
             updateSpinner()
-            country.setSelection(_cachePosition)
+            binding.country.setSelection(_cachePosition)
         } else {
             viewModel.refresh()
         }
 
-        refreshLayout.setOnRefreshListener {
+        binding.refreshLayout.setOnRefreshListener {
             viewModel.refresh()
         }
 
-        country.onItemSelectedListener = this
-
+        binding.country.onItemSelectedListener = this
     }
 
     private fun initObserve() {
         Timber.e("INIT OBSERVE")
 
-        viewModel.countries.observe(viewLifecycleOwner, Observer {
+        viewModel.countries.observe(viewLifecycleOwner, {
             it?.let { countries ->
-                refreshLayout.isRefreshing = false
+                binding.refreshLayout.isRefreshing = false
                 _cacheCountries = countries.addEmptyFirst()
                 updateSpinner()
             }
@@ -98,19 +99,18 @@ class WorldWideFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun updateUI(today: Datas) {
-        val nbf = NumberFormat.getInstance()
         Timber.e("YEAH!!!!!!!!!")
-        conFirmed.text = nbf.format(today.cases?.total)
-        newConFirmed.text = today.cases?.new
+        contentBinding.conFirmed.text = today.cases?.total.toCurrency()
+        contentBinding.newConFirmed.text = today.cases?.new
 
-        hospitalized.text = nbf.format(today.cases?.active)
-        newHospitalized.text = ""
+        contentBinding.hospitalized.text = today.cases?.active.toCurrency()
+        contentBinding.newHospitalized.text = ""
 
-        recovered.text = nbf.format(today.cases?.recovered)
-        newRecovered.text = ""
+        contentBinding.recovered.text = today.cases?.recovered.toCurrency()
+        contentBinding.newRecovered.text = ""
 
-        deaths.text = nbf.format(today.deaths?.total)
-        newDeaths.text = today.deaths?.new
+        contentBinding.deaths.text = today.deaths?.total.toCurrency()
+        contentBinding.newDeaths.text = today.deaths?.new
         materialToolbar.subtitle = today.day?.let { lastUpdate(it) }
     }
 
@@ -123,12 +123,12 @@ class WorldWideFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (position != 0 && _cacheCountries != null) {
-            graphLoading.visibility = View.VISIBLE
+            binding.graphLoading.visibility = View.VISIBLE
             _cachePosition = position
             _cacheCountries!![position].let { it ->
                 Timber.e(it)
                 GlobalScope.launch(Dispatchers.Main) {
-                    viewModel.getStatic(it).observe(viewLifecycleOwner, Observer { data ->
+                    viewModel.getStatic(it).observe(viewLifecycleOwner, { data ->
                         data?.let {
                             _cacheDatas = data
                             updateUI(data)
@@ -138,7 +138,7 @@ class WorldWideFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     val his = viewModel.getHistory(it)
                     his.observe(viewLifecycleOwner, object : Observer<List<History>> {
                         override fun onChanged(t: List<History>?) {
-                            if (t != null && t.size > 1){
+                            if (!t.isNullOrEmpty()) {
                                 resetChart()
                                 setLineChart(t.toLineDataSet())
                                 his.removeObserver(this)
@@ -152,12 +152,13 @@ class WorldWideFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun resetChart() {
-        lineChart.fitScreen()
-        lineChart.data?.clearValues()
-        lineChart.xAxis.valueFormatter = null
-        lineChart.notifyDataSetChanged()
-        lineChart.clear()
-        lineChart.invalidate()
+        binding.lineChart.fitScreen()
+        if (binding.lineChart.data != null)
+            binding.lineChart.data.clearValues()
+        binding.lineChart.xAxis.valueFormatter = null
+        binding.lineChart.notifyDataSetChanged()
+        binding.lineChart.clear()
+        binding.lineChart.invalidate()
     }
 
     override fun onDestroyView() {
@@ -196,19 +197,19 @@ class WorldWideFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         setCircleColor(el)
                     })
             }
-            lineChart.data = LineData(dataSets)
-            lineChart.xAxis.setLabelCount(sets.date.size, true)
-            lineChart.xAxis.setDrawLabels(true)
-            lineChart.xAxis.valueFormatter = StringForMetter(sets.date as ArrayList<String>)
-            lineChart.xAxis.labelRotationAngle = -70f
-            lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            binding.lineChart.data = LineData(dataSets)
+            binding.lineChart.xAxis.setLabelCount(sets.date.size, true)
+            binding.lineChart.xAxis.setDrawLabels(true)
+            binding.lineChart.xAxis.valueFormatter = StringForMetter(sets.date as ArrayList<String>)
+            binding.lineChart.xAxis.labelRotationAngle = -70f
+            binding.lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-            lineChart.setDrawGridBackground(false)
-            lineChart.axisLeft.isEnabled = true
-            lineChart.axisRight.isEnabled = false
-            lineChart.description.isEnabled = false
-            lineChart.invalidate()
-            graphLoading.visibility = View.GONE
+            binding.lineChart.setDrawGridBackground(false)
+            binding.lineChart.axisLeft.isEnabled = true
+            binding.lineChart.axisRight.isEnabled = false
+            binding.lineChart.description.isEnabled = false
+            binding.lineChart.invalidate()
+            binding.graphLoading.visibility = View.GONE
         } catch (e: Exception) {
             e.printStackTrace()
         }

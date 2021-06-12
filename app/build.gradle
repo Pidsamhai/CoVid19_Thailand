@@ -1,25 +1,41 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
+Properties properties = new Properties()
+File propertiesFile = new File('key.properties')
+propertiesFile.withInputStream {
+    properties.load(it)
+}
+
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "com.github.pidsamhai.covid19thailand"
         minSdkVersion 22
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 2
         versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    signingConfigs {
+        release {
+            keyAlias = properties."KEY_ALIAS"
+            keyPassword = properties."KEY_PASSWORD"
+            storePassword = properties."STORE_PASSWORD"
+            storeFile = file("psm_covid_19.jks")
+            enableV3Signing = true
+            enableV4Signing = true
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -30,29 +46,38 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding true
+    }
+    externalNativeBuild {
+        cmake {
+            path = "CMakeLists.txt"
+        }
+    }
 }
 
 dependencies {
-    def nav_version = "2.3.0-alpha04"
-    def room_version = "2.2.5"
-    def koin_version = '2.1.5'
+    def nav_version = "2.3.5"
+    def room_version = "2.3.0"
+    def koin_version = '2.2.3'
 //    def lifecycle_version = "2.2.0"
 
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
+    implementation 'com.google.android.material:material:1.4.0-rc01'
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     implementation 'com.squareup.retrofit2:converter-scalars:2.8.1'
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
@@ -64,10 +89,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
 
-    implementation "org.koin:koin-androidx-scope:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-    implementation "org.koin:koin-androidx-fragment:$koin_version"
-    implementation "org.koin:koin-androidx-ext:$koin_version"
+    implementation "io.insert-koin:koin-androidx-scope:$koin_version"
+    implementation "io.insert-koin:koin-androidx-viewmodel:$koin_version"
+    implementation "io.insert-koin:koin-androidx-fragment:$koin_version"
+    implementation "io.insert-koin:koin-androidx-ext:$koin_version"
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
@@ -75,4 +100,9 @@ dependencies {
 
     implementation 'com.github.Pidsamhai:GitRelease:0.2.1-beta'
 
+    /**
+     * Fix JDK 11 Compile Error
+     */
+    compileOnly("javax.annotation:javax.annotation-api:1.3.2")
+    compileOnly("com.github.pengrad:jdk9-deps:22e725c32e")
 }

@@ -1,6 +1,5 @@
 package com.github.pidsamhai.covid19thailand.ui.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +7,15 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.github.pidsamhai.covid19thailand.R
+import com.github.pidsamhai.covid19thailand.databinding.FragmentTodayBinding
+import com.github.pidsamhai.covid19thailand.databinding.LayoutStaticBinding
 import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.ToDayViewModel
 import com.github.pidsamhai.covid19thailand.utilities.lastUpdate
 import com.github.pidsamhai.covid19thailand.utilities.newS
+import com.github.pidsamhai.covid19thailand.utilities.toCurrency
 import com.github.pidsamhai.covid19thailand.utilities.toToday
 import com.google.android.material.appbar.MaterialToolbar
-import kotlinx.android.synthetic.main.fragment_today.*
-import kotlinx.android.synthetic.main.layout_static.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
@@ -25,26 +25,31 @@ class TodayFragment : BaseFragment() {
 
     private val viewModel: ToDayViewModel by sharedViewModel()
     private var cache: String? = null
-
     private lateinit var materialToolbar: MaterialToolbar
+    private lateinit var _binding: FragmentTodayBinding
+    private lateinit var _contentBinding: LayoutStaticBinding
+    private val binding: FragmentTodayBinding
+        get() = _binding
+    private val contentBinding: LayoutStaticBinding
+        get() = _contentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_today, container, false)
+    ): View {
+        _binding = FragmentTodayBinding.inflate(inflater, container, false)
+        _contentBinding = LayoutStaticBinding.bind(_binding.root)
+        return _binding.root
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
         materialToolbar = (activity as AppCompatActivity).findViewById(R.id.materialToolbar)
         materialToolbar.title = resources.getString(R.string.covid_today)
 
-        viewModel.today.observe(viewLifecycleOwner, Observer {
+        viewModel.today.observe(viewLifecycleOwner, {
             it?.let {
-                refreshLayout.isRefreshing = false
+                binding.refreshLayout.isRefreshing = false
                 Timber.e("Fetch Data")
                 cache = it.toGsonString()
                 updateUI(it)
@@ -59,25 +64,25 @@ class TodayFragment : BaseFragment() {
         } else {
             viewModel.refresh()
         }
-        refreshLayout.setOnRefreshListener {
+        binding.refreshLayout.setOnRefreshListener {
             viewModel.refresh()
         }
     }
 
     private fun updateUI(today: Today) {
         Timber.e("YEAH!!!!!!!!!")
-        conFirmed.text = today.confirmed.toString()
-        newConFirmed.text = newS(today.newConfirmed)
+        contentBinding.conFirmed.text = today.confirmed.toCurrency()
+        contentBinding.newConFirmed.text = newS(today.newConfirmed)
 
-        hospitalized.text = today.hospitalized.toString()
-        newHospitalized.text =
-            if (today.newHospitalized!! > 0) "( เพิ่มขึ้น ${today.newHospitalized} )" else ""
+        contentBinding.hospitalized.text = today.hospitalized.toCurrency()
+        contentBinding.newHospitalized.text =
+            if (today.newHospitalized!! > 0) "( เพิ่มขึ้น ${today.newHospitalized.toCurrency()} )" else ""
 
-        recovered.text = today.recovered.toString()
-        newRecovered.text = newS(today.newRecovered)
+        contentBinding.recovered.text = today.recovered.toCurrency()
+        contentBinding.newRecovered.text = newS(today.newRecovered)
 
-        deaths.text = today.deaths.toString()
-        newDeaths.text = newS(today.newDeaths)
+        contentBinding.deaths.text = today.deaths.toCurrency()
+        contentBinding.newDeaths.text = newS(today.newDeaths)
         materialToolbar.subtitle = lastUpdate(today.updateDate)
     }
 

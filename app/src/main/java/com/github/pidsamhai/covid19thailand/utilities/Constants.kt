@@ -32,7 +32,7 @@ fun StringForMetter(data:ArrayList<String>) : ValueFormatter{
 }
 
 fun newS(data: Int?): String {
-    return "( เพิ่มขึ้น $data )"
+    return "( เพิ่มขึ้น ${data.toCurrency()} )"
 }
 
 fun lastUpdate(data: String): String {
@@ -48,4 +48,11 @@ fun List<String>.addEmptyFirst(): List<String> {
     val mutableList = mutableListOf("")
     mutableList.addAll(this)
     return mutableList
+}
+
+object Keys {
+    init {
+        System.loadLibrary("native-lib")
+    }
+    external fun rapidCovid19Api(): String
 }
