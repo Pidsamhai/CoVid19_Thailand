@@ -121,8 +121,9 @@ dependencies {
     // Integration with observables
     implementation "androidx.compose.runtime:runtime-livedata:$Versions.compose"
 
-
     implementation "androidx.navigation:navigation-compose:$Versions.navigation_compose"
+
+    implementation "com.github.AAChartModel:AAChartCore-Kotlin:$Versions.aa_chart"
 
     /**
      * Fix JDK 11 Compile Error

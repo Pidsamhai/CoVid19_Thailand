@@ -39,6 +39,11 @@ fun lastUpdate(data: String): String {
     return "( อัพเดทล่าสุด $data)"
 }
 
+fun String?.toLastUpdate(): String? {
+    if (this != null) return "( อัพเดทล่าสุด $this )"
+    return this
+}
+
 fun String.toToDay(value: String): Today {
     val listType: Type = object : TypeToken<Today>() {}.type
     return Gson().fromJson(value, listType)
