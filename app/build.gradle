@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
+apply from: "$rootDir/dependencies.gradle"
 
 Properties properties = new Properties()
 File propertiesFile = new File('key.properties')
@@ -37,6 +38,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+
+        debug {
+            applicationIdSuffix ".debug"
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -48,23 +53,24 @@ android {
     }
     buildFeatures {
         viewBinding true
+        compose true
     }
     externalNativeBuild {
         cmake {
             path = "CMakeLists.txt"
         }
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.0-rc01'
+    }
 }
 
 dependencies {
     def nav_version = "2.3.5"
-    def room_version = "2.3.0"
-    def koin_version = '2.2.3'
 //    def lifecycle_version = "2.2.0"
 
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.5.0'
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
@@ -82,23 +88,41 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
-    implementation "androidx.room:room-ktx:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$Versions.room"
+    kapt "androidx.room:room-compiler:$Versions.room"
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 
 
-    implementation "io.insert-koin:koin-androidx-scope:$koin_version"
-    implementation "io.insert-koin:koin-androidx-viewmodel:$koin_version"
-    implementation "io.insert-koin:koin-androidx-fragment:$koin_version"
-    implementation "io.insert-koin:koin-androidx-ext:$koin_version"
+    implementation "io.insert-koin:koin-android:$Versions.koin"
+    implementation "io.insert-koin:koin-androidx-compose:$Versions.koin"
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'com.github.Pidsamhai:GitRelease:0.2.1-beta'
+
+    implementation "androidx.compose.ui:ui:$Versions.compose"
+    // Tooling support (Previews, etc.)
+    implementation "androidx.compose.ui:ui-tooling:1.0.0-beta09"
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation "androidx.compose.foundation:foundation:$Versions.compose"
+    // Material Design
+    implementation "androidx.compose.material:material:$Versions.compose"
+    // Material design icons
+    implementation "androidx.compose.material:material-icons-core:$Versions.compose"
+    implementation "androidx.compose.material:material-icons-extended:$Versions.compose"
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.3.0-rc01'
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07'
+    // Integration with observables
+    implementation "androidx.compose.runtime:runtime-livedata:$Versions.compose"
+
+
+    implementation "androidx.navigation:navigation-compose:$Versions.navigation_compose"
 
     /**
      * Fix JDK 11 Compile Error
