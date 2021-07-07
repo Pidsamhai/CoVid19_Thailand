@@ -7,5 +7,6 @@ ext.Versions = [
         gson: "2.8.6",
         retrofit: "2.8.1",
         logging_interceptor: "4.9.1",
-        timber: "4.7.1"
+        timber: "4.7.1",
+        aa_chart: "b51ffbe42b",
 ]
