@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-private const val BASE_URL = "http://covid19.th-stat.com/json/covid19v2/"
+private const val BASE_URL = "https://covid19.th-stat.com/json/covid19v2/"
 
 interface Covid19ApiServices {
     @GET("getTodayCases.json")

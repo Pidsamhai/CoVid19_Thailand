@@ -2,20 +2,19 @@ package com.github.pidsamhai.covid19thailand.di
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.SavedStateHandle
 import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.github.pidsamhai.covid19thailand.db.CoVid19Database
+import com.github.pidsamhai.covid19thailand.db.LastFetch
+import com.github.pidsamhai.covid19thailand.db.LastFetchImpl
 import com.github.pidsamhai.covid19thailand.db.dao.RapidDao
 import com.github.pidsamhai.covid19thailand.db.dao.TimeLineDao
 import com.github.pidsamhai.covid19thailand.db.dao.TodayDao
-import com.github.pidsamhai.covid19thailand.db.network.NetWorkDataSource
-import com.github.pidsamhai.covid19thailand.db.network.NetWorkDataSourceImpl
 import com.github.pidsamhai.covid19thailand.network.api.CoVid19RapidApiServices
 import com.github.pidsamhai.covid19thailand.network.api.Covid19ApiServices
-import com.github.pidsamhai.covid19thailand.repository.CoVidDDCRepository
-import com.github.pidsamhai.covid19thailand.repository.CoVidDDCRepositoryImpl
-import com.github.pidsamhai.covid19thailand.repository.RapidRepository
-import com.github.pidsamhai.covid19thailand.repository.RapidRepositoryImpl
+import com.github.pidsamhai.covid19thailand.repository.*
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.TimeLineViewModel
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.ToDayViewModel
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.WorldWideModel
@@ -44,21 +43,23 @@ val databaseModule = module {
         return database.timeLineDao()
     }
 
+    fun getDefaultPref(application: Application): SharedPreferences {
+        return application.getSharedPreferences("lastFetch", Context.MODE_PRIVATE)
+    }
+
     single { getDatabase(androidApplication()) }
     single { getRapidDao(get()) }
     single { getTodayDao(get()) }
     single { getTimelinedayDao(get()) }
+    single { getDefaultPref(get()) }
+    single<LastFetch> { LastFetchImpl(get()) }
 
 }
 
 val repositoryModule = module {
-    single<NetWorkDataSource> {
-        NetWorkDataSourceImpl(get(), get())
-    }
     single { Covid19ApiServices.create() }
     single { CoVid19RapidApiServices.create() }
-    single<RapidRepository> { RapidRepositoryImpl(get(), get()) }
-    single<CoVidDDCRepository> { CoVidDDCRepositoryImpl(get(), get(), get()) }
+    single<Repository> { RepositoryImpl(get(), get(), get(), get(), get(), get()) }
 }
 
 val viewModelModule = module {

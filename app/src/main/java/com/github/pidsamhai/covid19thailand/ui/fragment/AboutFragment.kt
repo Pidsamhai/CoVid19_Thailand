@@ -45,11 +45,11 @@ class AboutFragment : ScopeFragment(){
                 showToast()
             }
         }
-        materialToolbar = (activity as AppCompatActivity).findViewById(R.id.materialToolbar)
-        materialToolbar.apply {
-            title = "About"
-            subtitle = "   "
-        }
+//        materialToolbar = (activity as AppCompatActivity).findViewById(R.id.materialToolbar)
+//        materialToolbar.apply {
+//            title = "About"
+//            subtitle = "   "
+//        }
     }
 
     private fun showToast() = launch {

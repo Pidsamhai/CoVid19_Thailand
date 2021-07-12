@@ -29,35 +29,3 @@ data class History(
     @PrimaryKey(autoGenerate = false)
     var historyPk: String = "history_pk"
 }
-
-fun List<History>.toLineDataSet(): CoVidDataSets {
-    val confirmed: ArrayList<BarEntry> = ArrayList()
-    val death: ArrayList<BarEntry> = ArrayList()
-    val recovered: ArrayList<BarEntry> = ArrayList()
-    val date: ArrayList<String> = ArrayList()
-    this.forEachIndexed { index, data ->
-        val indies = index.toFloat()
-        if(data.cases!!.total != null)
-            confirmed.add(BarEntry(indies, data.cases.total!!.toFloat()))
-        else
-            confirmed.add(BarEntry(indies, 0f))
-
-        if (data.deaths!!.total != null)
-            death.add(BarEntry(indies, data.deaths.total!!.toFloat()))
-        else
-            death.add(BarEntry(indies, 0F))
-
-        if (data.cases.recovered != null)
-            recovered.add(BarEntry(indies, data.cases.recovered.toFloat()))
-        else
-            recovered.add(BarEntry(indies, 0F))
-        date.add(data.day ?: "")
-    }
-    Timber.e("${confirmed.size}")
-    return CoVidDataSets(
-        confirmed,
-        death,
-        recovered,
-        date
-    )
-}

@@ -3,9 +3,15 @@ package com.github.pidsamhai.covid19thailand
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.*
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInVertically
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.github.pidsamhai.covid19thailand.navigation.NavGraph
@@ -26,6 +32,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun BodyContent() {
 
@@ -40,7 +47,8 @@ private fun BodyContent() {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val appBarTitle = (routes.find { it.route == currentDestination?.route } ?: NavRoute.Today).title
+    val appBarTitle =
+        (routes.find { it.route == currentDestination?.route } ?: NavRoute.Today).title
     var subtitle by remember { mutableStateOf<String?>(null) }
 
     val subtitleCallBack: SubtitleCallback = {
@@ -62,7 +70,21 @@ private fun BodyContent() {
                         icon = it.icon,
                         label = { Text(text = stringResource(it.title)) },
                         alwaysShowLabel = false,
-                        onClick = { navController.navigate(it.route) }
+                        onClick = {
+                            navController.navigate(it.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                                anim {
+                                    enter = R.anim.nav_default_enter_anim
+                                    exit = R.anim.nav_default_exit_anim
+                                    popEnter = R.anim.nav_default_pop_enter_anim
+                                    popExit = R.anim.nav_default_pop_exit_anim
+                                }
+                            }
+                        }
                     )
                 }
             }

@@ -1,63 +1,49 @@
 package com.github.pidsamhai.covid19thailand.utilities
 
-import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
-import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base.Datas
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import timber.log.Timber
-import java.lang.reflect.Type
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
+import kotlinx.datetime.toLocalDateTime
 
 const val DATABASE_NAME = "covid19-db"
 const val OWNER = " Pidsamhai"
 const val REPOSITORY = "CoVid19_Thailand"
 
-fun String.toToday() : Today {
-    return Gson().fromJson(this,
-        Today::class.java)
-}
+val StatusColors = listOf("#FFFF00", "#FF0000", "#00FF00")
+val StatusTexts = listOf("Confirmed", "Death", "Recovered")
 
-fun String.toDatas() : Datas {
-    return Gson().fromJson(this,
-        Datas::class.java)
-}
+val DDC_DATE_PATTERN = "^[\\d]{2}[/][\\d]{2}[/][\\d]{4}[\\s][\\d]{2}[:][\\d]{2}\$".toRegex()
 
-fun StringForMetter(data:ArrayList<String>) : ValueFormatter{
-    Timber.e(data.toString())
-    return object : ValueFormatter(){
-        override fun getFormattedValue(value: Float): String {
-            return data[value.toInt()]
-        }
-    }
-}
-
-fun newS(data: Int?): String {
-    return "( เพิ่มขึ้น ${data.toCurrency()} )"
-}
-
-fun lastUpdate(data: String): String {
-    return "( อัพเดทล่าสุด $data)"
+fun ddcDateReformat(string: String): String {
+    val date = string.split(" ").first().split("/").reversed().joinToString("-")
+    val time = (string.split(" ").lastOrNull() ?: "00:00") + ":00"
+    return "${date}T$time"
 }
 
 fun String?.toLastUpdate(): String? {
-    if (this != null) return "( อัพเดทล่าสุด $this )"
-    return this
-}
-
-fun String.toToDay(value: String): Today {
-    val listType: Type = object : TypeToken<Today>() {}.type
-    return Gson().fromJson(value, listType)
-}
-
-fun List<String>.addEmptyFirst(): List<String> {
-    val mutableList = mutableListOf("")
-    mutableList.addAll(this)
-    return mutableList
+    var datetime: String? = null
+    if (this != null) {
+        val parserDate = if (this.matches(DDC_DATE_PATTERN)) {
+            ddcDateReformat(this).toLocalDateTime()
+        } else {
+            /**
+             * Force remove TimeZone
+             * TimeZone not work
+             */
+            this.split("+")[0].toLocalDateTime()
+        }
+        datetime = "${parserDate.dayOfMonth}/${parserDate.monthNumber + 1}/${parserDate.year} " +
+                "${parserDate.hour}:${parserDate.minute}"
+    }
+    return if (datetime != null) "( อัพเดทล่าสุด $datetime )" else datetime
 }
 
 object Keys {
     init {
         System.loadLibrary("native-lib")
     }
+
     external fun rapidCovid19Api(): String
 }
+
+val chartLabelColor: String
+    @Composable get() = if (isSystemInDarkTheme()) "#ffffff" else "#000000"

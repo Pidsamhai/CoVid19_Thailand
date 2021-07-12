@@ -35,6 +35,15 @@ interface RapidDao {
     @Query("SELECT * FROM rapid_static WHERE pk = :country")
     fun getStaticReal(country: String): LiveData<Static>
 
+    @Query("SELECT * FROM rapid_static WHERE pk = :country")
+    fun getStaticX(country: String): Static?
+
     @Query("SELECT responsePk FROM rapid_statics")
-    fun getCountries(): LiveData<List<String>>
+    fun getCountriesLiveData(): LiveData<List<String>>
+
+    @Query("SELECT responsePk FROM rapid_statics")
+    fun getCountries(): List<String>?
+
+    @Query("SELECT * FROM rapid_statics")
+    fun getStaticsX(): List<Datas>
 }

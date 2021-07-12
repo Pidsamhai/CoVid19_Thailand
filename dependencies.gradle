@@ -9,4 +9,7 @@ ext.Versions = [
         logging_interceptor: "4.9.1",
         timber: "4.7.1",
         aa_chart: "b51ffbe42b",
+        acc_companist: "0.12.0",
+        lifecycle: "2.4.0-alpha02",
+        kotlinx_datetime: "0.2.1"
 ]

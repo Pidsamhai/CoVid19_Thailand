@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TodayDao {
@@ -14,6 +15,9 @@ interface TodayDao {
 
     @Query("SELECT * FROM today ORDER BY updateDate DESC LIMIT 1")
     fun getToDay() : LiveData<Today>
+
+    @Query("SELECT * FROM today ORDER BY updateDate DESC LIMIT 1")
+    fun getToDayFlow() : Flow<Today>
 
     @Query("SELECT * FROM today ORDER BY updateDate DESC LIMIT 1")
     fun hashData() : Today?
