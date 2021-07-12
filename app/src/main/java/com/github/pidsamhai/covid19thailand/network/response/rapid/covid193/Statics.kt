@@ -12,7 +12,7 @@ data class Statics(
         val data = ArrayList<Datas>()
         datas?.forEach {
             val temp = it
-            temp.country?.let { c ->
+            temp.country.let { c ->
                 temp.responsePk = c
             }
             data.add(temp)

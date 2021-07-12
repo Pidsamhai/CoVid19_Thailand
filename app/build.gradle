@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply from: "$rootDir/dependencies.gradle"
+apply plugin: 'org.jetbrains.kotlin.android'
 
 Properties properties = new Properties()
 File propertiesFile = new File('key.properties')
@@ -124,6 +125,11 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:$Versions.navigation_compose"
 
     implementation "com.github.AAChartModel:AAChartCore-Kotlin:$Versions.aa_chart"
+
+    implementation "com.google.accompanist:accompanist-swiperefresh:$Versions.acc_companist"
+
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime:$Versions.kotlinx_datetime"
 
     /**
      * Fix JDK 11 Compile Error

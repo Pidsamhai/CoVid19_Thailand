@@ -1,6 +1,5 @@
 package com.github.pidsamhai.covid19thailand.db.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -17,8 +16,25 @@ interface TimeLineDao {
     fun upSertDatas(data: List<Data>)
 
     @Query("SELECT * FROM timeline LIMIT 1")
-    fun getTimeLine() : LiveData<TimeLine>
+    fun getTimeLine(): TimeLine?
 
-    @Query("SELECT * FROM timeline_data ORDER BY date DESC LIMIT 50")
-    fun getDatas() : LiveData<List<Data>>
+    @Query(
+        "SELECT * FROM " +
+                "(SELECT * FROM (SELECT" +
+                "(substr(`date`, 7,4) || '-' ||" +
+                "substr(`date`, 4, 2)|| '-' ||" +
+                "substr(`date`, 1, 2)) as date," +
+                "confirmed," +
+                "hospitalized," +
+                "recovered," +
+                "deaths," +
+                "newConfirmed," +
+
+                "newHospitalized," +
+                "newRecovered," +
+                "newDeaths " +
+                "FROM timeline_data) ORDER by strftime(`date`) DESC LIMIT 5) " +
+                "ORDER BY date ASC"
+    )
+    fun getDatas(): List<Data>
 }

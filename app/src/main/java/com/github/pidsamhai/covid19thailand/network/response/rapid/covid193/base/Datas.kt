@@ -11,7 +11,7 @@ data class Datas(
     @SerializedName("cases")
     val cases: Cases?,
     @SerializedName("country")
-    val country: String?,
+    val country: String = "unknown",
     @SerializedName("day")
     val day: String?,
     @SerializedName("deaths")
@@ -22,7 +22,7 @@ data class Datas(
     val time: String?
 ) {
     @PrimaryKey(autoGenerate = false)
-    var responsePk: String = "statics_pk"
+    var responsePk: String = "country"
     fun toGsonString() : String {
         return Gson().toJson(this)
     }

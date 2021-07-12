@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import com.github.pidsamhai.covid19thailand.ui.callback.SubtitleCallback
 import com.github.pidsamhai.covid19thailand.ui.timeline.TimelinePage
 import com.github.pidsamhai.covid19thailand.ui.today.TodayPage
+import com.github.pidsamhai.covid19thailand.ui.worldwide.WorldWidePage
 
 @Composable
 fun NavGraph(
@@ -38,9 +39,8 @@ fun NavGraph(
         }
 
         composable(NavRoute.WorldWide.route) {
-            Text(
-                modifier = Modifier.fillMaxSize(),
-                text = "World Wide"
+            WorldWidePage(
+                subtitleCallback = subtitleCallback
             )
         }
 

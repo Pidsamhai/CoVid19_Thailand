@@ -1,48 +1,21 @@
 package com.github.pidsamhai.covid19thailand.ui.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.github.pidsamhai.covid19thailand.repository.RapidRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import androidx.lifecycle.*
+import com.github.pidsamhai.covid19thailand.Result
+import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
+import com.github.pidsamhai.covid19thailand.repository.Repository
 
 
 class WorldWideModel(
-    private val rapidRepository: RapidRepository,
-    private val stateHandle: SavedStateHandle
+    private val stateHandle: SavedStateHandle,
+    repository: Repository
 ) : ViewModel() {
-    val countries = rapidRepository.countries
-    val history = rapidRepository.histories
+    private val refreshKey = MutableLiveData(System.currentTimeMillis())
+    val country = MutableLiveData<String?>(null)
+    val countriesX: LiveData<Result<List<String>>> = refreshKey.switchMap { repository.getCountryLiveData() }
+    val static: LiveData<Result<Static>> = country.switchMap { repository.getStatic(it ?: return@switchMap liveData {  }) }
 
-    var cachePosition: Int?
-        get() = stateHandle.get<Int>(STATE_POSITION)
-        set(value) {
-            stateHandle.set(STATE_POSITION, value)
-        }
+    fun refresh() = refreshKey.postValue(System.currentTimeMillis())
 
-    var cacheDatas: String?
-        get() = stateHandle.get(STATE_DATA)
-        set(value) {
-            stateHandle.set(STATE_DATA, value)
-        }
-    var cacheCountries: List<String>?
-        get() = stateHandle.get(STATE_COUNTRIES)
-        set(value) {
-            stateHandle.set(STATE_COUNTRIES, value)
-        }
-
-    fun refresh() {
-        rapidRepository.fetchStaticsData()
-    }
-
-    suspend fun getStatic(country: String) = rapidRepository.getStatic(country)
-
-    suspend fun getHistory(country: String) = rapidRepository.getHistory(country)
-
-    companion object {
-        private const val STATE_POSITION = "spinner_position"
-        private const val STATE_DATA = "data"
-        private const val STATE_COUNTRIES = "countries"
-    }
+    fun getCountry(country: String) = this.country.postValue(country)
 }

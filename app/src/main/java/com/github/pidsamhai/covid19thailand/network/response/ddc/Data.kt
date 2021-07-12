@@ -5,6 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
+import com.github.pidsamhai.covid19thailand.utilities.StatusColors
+import com.github.pidsamhai.covid19thailand.utilities.StatusTexts
 import com.google.gson.annotations.SerializedName
 import timber.log.Timber
 import java.io.Serializable
@@ -43,50 +45,18 @@ data class CoVidDataSets(
     }
 }
 
-typealias confirmed = ArrayList<Entry>
-typealias death = ArrayList<Entry>
-typealias recovered = ArrayList<Entry>
-typealias date = ArrayList<String>
+data class LineDataSet(
+    val title: String,
+    val color: String,
+    val data: List<Int>
+)
 
-fun List<Data>.toLineDataSet(): CoVidDataSets {
-    val confirmed: ArrayList<BarEntry> = ArrayList()
-    val death: ArrayList<BarEntry> = ArrayList()
-    val recovered: ArrayList<BarEntry> = ArrayList()
-    val date: ArrayList<String> = ArrayList()
-    this.forEachIndexed { index, data ->
-        val indies = index.toFloat()
-        confirmed.add(BarEntry(indies, data.confirmed!!.toFloat()))
-        death.add(BarEntry(indies, data.deaths!!.toFloat()))
-        recovered.add(BarEntry(indies, data.recovered!!.toFloat()))
-        date.add(data.date.substring(0, data.date.length - 2))
+fun List<Data>.toDataSet(): List<LineDataSet> {
+    val dataset = mutableListOf<LineDataSet>()
+    StatusTexts.forEachIndexed { index, s ->
+            if(index == 0) { dataset.add(LineDataSet(s, StatusColors[index], this.map { it.confirmed ?: 0 })) }
+            if (index == 1) { dataset.add(LineDataSet(s, StatusColors[index], this.map { it.recovered ?: 0 })) }
+            if(index == 2) { dataset.add(LineDataSet(s, StatusColors[index], this.map { it.deaths ?: 0 })) }
     }
-    Timber.e("${confirmed.size}")
-    return CoVidDataSets(
-        confirmed,
-        death,
-        recovered,
-        date
-    )
-}
-
-fun List<Data>.toBarDataSet(): CoVidDataSets {
-    val confirmed: confirmed = ArrayList()
-    val death: death = ArrayList()
-    val recovered: recovered = ArrayList()
-    val date: date = ArrayList()
-    this.forEachIndexed { index, data ->
-        if (index > 80) {
-            confirmed.add(Entry(index.toFloat(), data.confirmed!!.toFloat()))
-            death.add(Entry(index.toFloat(), data.deaths!!.toFloat()))
-            recovered.add(Entry(index.toFloat(), data.recovered!!.toFloat()))
-            date.add(data.date)
-        }
-    }
-    Timber.e("${confirmed.size}")
-    return CoVidDataSets(
-        confirmed,
-        death,
-        recovered,
-        date
-    )
+    return dataset
 }

@@ -6,6 +6,7 @@ import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.hist
 import com.github.pidsamhai.covid19thailand.utilities.Keys
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -34,11 +35,6 @@ interface CoVid19RapidApiServices {
     companion object {
         fun create(): CoVid19RapidApiServices {
             val requestInterceptor = Interceptor { chain ->
-
-//                val url = chain.request()
-//                    .url()
-//                    .newBuilder()
-//                    .build()
                 val request = chain.request()
                     .newBuilder()
                     .header("x-rapidapi-host", apiHost)
@@ -50,6 +46,9 @@ interface CoVid19RapidApiServices {
 
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
+                .addNetworkInterceptor(HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                })
                 .build()
 
             return Retrofit.Builder()
