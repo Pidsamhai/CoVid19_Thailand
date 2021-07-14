@@ -7,10 +7,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.github.pidsamhai.covid19thailand.R
 
-sealed class NavRoute(val route: String, @StringRes val title: Int, val icon: @Composable () -> Unit) {
+sealed class NavRoute(
+    val route: String,
+    @StringRes val title: Int,
+    @StringRes val label: Int,
+    val icon: @Composable () -> Unit
+) {
     object Today: NavRoute(
         route = "today",
-        title = R.string.today,
+        label = R.string.today,
+        title = R.string.title_today,
         icon = {
             Icon(
                 painter = painterResource(id = R.drawable.ic_today),
@@ -21,7 +27,8 @@ sealed class NavRoute(val route: String, @StringRes val title: Int, val icon: @C
 
     object TimeLine: NavRoute(
         route = "timeline",
-        title = R.string.time_line,
+        label = R.string.time_line,
+        title = R.string.title_time_line,
         icon = {
             Icon(
                 painter = painterResource(id = R.drawable.ic_timeline),
@@ -32,7 +39,8 @@ sealed class NavRoute(val route: String, @StringRes val title: Int, val icon: @C
 
     object WorldWide: NavRoute(
         route = "worldwide",
-        title = R.string.world,
+        label = R.string.world,
+        title = R.string.title_world,
         icon = {
             Icon(
                 painter = painterResource(id = R.drawable.ic_world_wide),
@@ -43,6 +51,7 @@ sealed class NavRoute(val route: String, @StringRes val title: Int, val icon: @C
 
     object About: NavRoute(
         route = "about",
+        label = R.string.about,
         title = R.string.about,
         icon = {
             Icon(
@@ -50,5 +59,19 @@ sealed class NavRoute(val route: String, @StringRes val title: Int, val icon: @C
                 contentDescription = LocalContext.current.resources.getString(R.string.about)
             )
         }
+    )
+
+    object UpdateDialog: NavRoute(
+        route = "update",
+        label = 0,
+        title = 0,
+        icon = {  }
+    )
+
+    object DownloadDialog: NavRoute(
+        route = "download",
+        label = 0,
+        title = 0,
+        icon = {  }
     )
 }

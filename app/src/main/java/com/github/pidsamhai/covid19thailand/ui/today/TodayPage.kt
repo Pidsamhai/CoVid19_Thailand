@@ -21,11 +21,12 @@ import com.github.pidsamhai.covid19thailand.ui.widget.ReportWidget
 import com.github.pidsamhai.covid19thailand.utilities.toCurrency
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import org.koin.androidx.compose.getStateViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun TodayPage(
-    viewModel: ToDayViewModel = getViewModel(),
+    viewModel: ToDayViewModel = getStateViewModel(),
     subtitleCallback: SubtitleCallback
 ) {
     val todayResult by viewModel.today.observeAsState(initial = Result.Initial)

@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToDayViewModel(
-    private val repository: Repository,
-    private val state: SavedStateHandle
+    private val state: SavedStateHandle,
+    private val repository: Repository
 ) : ViewModel() {
     private val refreshKey = MutableLiveData(System.currentTimeMillis())
 

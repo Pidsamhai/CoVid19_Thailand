@@ -2,6 +2,8 @@ package com.github.pidsamhai.covid19thailand.db
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.github.pidsamhai.covid19thailand.network.response.github.ReleaseItem
+import com.google.gson.Gson
 import kotlinx.datetime.*
 import timber.log.Timber
 
@@ -41,10 +43,27 @@ class LastFetchImpl(
 
     override fun saveLastFetchCountry() = saveLastFetch(ShouldFetchCountryKey)
 
+    override fun saveReleaseItem(releaseItem: ReleaseItem) {
+        pref.edit {
+            putString(ReleaseItemKey, Gson().toJson(releaseItem))
+        }
+    }
+
+    override fun getReleaseItem(): ReleaseItem? {
+        val raw = pref.getString(ReleaseItemKey, null)
+        return if (raw == null)  raw
+        else Gson().fromJson(raw, ReleaseItem::class.java)
+    }
+
+    override fun removeReleaseItem() {
+        pref.edit { putString(ReleaseItemKey, null) }
+    }
+
     companion object {
         private const val EXP_MINUTE = 10L
         private const val ShouldFetchTodayKey = "ShouldFetchTodayKey"
         private const val ShouldFetchTimeLineKey = "ShouldFetchTimeLine"
         private const val ShouldFetchCountryKey = "ShouldFetchCountry"
+        private const val ReleaseItemKey = "ReleaseItem"
     }
 }

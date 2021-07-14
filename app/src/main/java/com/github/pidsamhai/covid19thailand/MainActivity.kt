@@ -4,12 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.slideInVertically
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -63,12 +63,14 @@ private fun BodyContent() {
             )
         },
         bottomBar = {
-            BottomAppBar {
+            BottomAppBar(
+                backgroundColor = Color.White
+            ) {
                 routes.forEach {
                     BottomNavigationItem(
                         selected = currentDestination?.route == it.route,
                         icon = it.icon,
-                        label = { Text(text = stringResource(it.title)) },
+                        label = { Text(text = stringResource(it.label)) },
                         alwaysShowLabel = false,
                         onClick = {
                             navController.navigate(it.route) {
@@ -77,12 +79,6 @@ private fun BodyContent() {
                                 }
                                 launchSingleTop = true
                                 restoreState = true
-                                anim {
-                                    enter = R.anim.nav_default_enter_anim
-                                    exit = R.anim.nav_default_exit_anim
-                                    popEnter = R.anim.nav_default_pop_enter_anim
-                                    popExit = R.anim.nav_default_pop_exit_anim
-                                }
                             }
                         }
                     )

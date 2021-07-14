@@ -12,12 +12,9 @@ import com.github.pidsamhai.covid19thailand.db.LastFetchImpl
 import com.github.pidsamhai.covid19thailand.db.dao.RapidDao
 import com.github.pidsamhai.covid19thailand.db.dao.TimeLineDao
 import com.github.pidsamhai.covid19thailand.db.dao.TodayDao
-import com.github.pidsamhai.covid19thailand.network.api.CoVid19RapidApiServices
-import com.github.pidsamhai.covid19thailand.network.api.Covid19ApiServices
+import com.github.pidsamhai.covid19thailand.network.api.*
 import com.github.pidsamhai.covid19thailand.repository.*
-import com.github.pidsamhai.covid19thailand.ui.viewmodel.TimeLineViewModel
-import com.github.pidsamhai.covid19thailand.ui.viewmodel.ToDayViewModel
-import com.github.pidsamhai.covid19thailand.ui.viewmodel.WorldWideModel
+import com.github.pidsamhai.covid19thailand.ui.viewmodel.*
 import com.github.pidsamhai.covid19thailand.utilities.OWNER
 import com.github.pidsamhai.covid19thailand.utilities.REPOSITORY
 import com.github.pidsamhai.gitrelease.GitRelease
@@ -59,14 +56,18 @@ val databaseModule = module {
 val repositoryModule = module {
     single { Covid19ApiServices.create() }
     single { CoVid19RapidApiServices.create() }
+    single { GithubApiService.create() }
+    single<DownloadUpdateService> { DownloadUpdateServiceImpl() }
     single<Repository> { RepositoryImpl(get(), get(), get(), get(), get(), get()) }
+    single<GithubRepository> { GithubRepositoryImpl(get(), get()) }
 }
 
 val viewModelModule = module {
-    single { SavedStateHandle() }
     viewModel { ToDayViewModel(get(), get()) }
     viewModel { TimeLineViewModel(get()) }
     viewModel { WorldWideModel(get(), get()) }
+    viewModel { AboutViewModel(get(), get()) }
+    viewModel { DownloadDialogVM(get(), get(), get()) }
     single { (activity: Activity) ->
         GitRelease(activity,
                 OWNER,

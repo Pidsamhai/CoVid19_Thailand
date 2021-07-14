@@ -7,4 +7,8 @@
     <string name="time_line">Time Line</string>
     <string name="world">World</string>
     <string name="about">About</string>
+
+    <string name="title_today">Covid 19 Today</string>
+    <string name="title_time_line">Covid 19 Time Line</string>
+    <string name="title_world">Covid 19 World</string>
 </resources>
