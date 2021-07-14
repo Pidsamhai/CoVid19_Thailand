@@ -1,6 +1,5 @@
 package com.github.pidsamhai.covid19thailand.ui.worldwide
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -14,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.pidsamhai.covid19thailand.Result
@@ -25,13 +23,13 @@ import com.github.pidsamhai.covid19thailand.ui.viewmodel.WorldWideModel
 import com.github.pidsamhai.covid19thailand.ui.widget.ReportWidget
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.getStateViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 fun WorldWidePage(
-    viewModel: WorldWideModel = getViewModel(),
+    viewModel: WorldWideModel = getStateViewModel(),
     subtitleCallback: SubtitleCallback = { }
 ) {
     val countriesResult by viewModel.countriesX.observeAsState(initial = Result.Initial)
@@ -62,7 +60,7 @@ fun WorldWidePage(
 
     SelectCountryDialog(
         title = "Select Country",
-        selected = { onSelectedCountry(it)  },
+        selected = { onSelectedCountry(it) },
         showDialog = showState,
         onDismiss = { showState = false },
         items = countries
@@ -92,7 +90,9 @@ fun WorldWidePage(
 
             static?.datas?.firstOrNull()?.let {
                 ReportWidget(
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
                     confirmed = it.cases?.total,
                     newConfirmed = it.cases?.new?.toIntOrNull(),
                     recovered = it.cases?.recovered,
