@@ -1,6 +1,6 @@
 ext.Versions = [
         kotlin: "1.5.10",
-        compose: "1.0.0-rc01",
+        compose: "1.0.0-rc02",
         navigation_compose: "2.4.0-alpha04",
         room: "2.3.0",
         koin: "3.1.1",
