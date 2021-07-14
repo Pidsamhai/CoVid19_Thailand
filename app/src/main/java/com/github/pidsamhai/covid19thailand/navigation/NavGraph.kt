@@ -1,18 +1,22 @@
 package com.github.pidsamhai.covid19thailand.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
+import com.github.pidsamhai.covid19thailand.AboutPage
 import com.github.pidsamhai.covid19thailand.ui.callback.SubtitleCallback
 import com.github.pidsamhai.covid19thailand.ui.timeline.TimelinePage
 import com.github.pidsamhai.covid19thailand.ui.today.TodayPage
+import com.github.pidsamhai.covid19thailand.ui.update.DownloadDialogContent
+import com.github.pidsamhai.covid19thailand.ui.update.UpdateDialogContent
 import com.github.pidsamhai.covid19thailand.ui.worldwide.WorldWidePage
+import org.koin.androidx.compose.getStateViewModel
 
 @Composable
 fun NavGraph(
@@ -45,9 +49,35 @@ fun NavGraph(
         }
 
         composable(NavRoute.About.route) {
-            Text(
-                modifier = Modifier.fillMaxSize(),
-                text = "About"
+            subtitleCallback(null)
+            AboutPage(
+                openUpdateDialog = { navController.navigate(NavRoute.UpdateDialog.route) }
+            )
+        }
+
+        dialog(
+            NavRoute.UpdateDialog.route,
+        ) {
+            UpdateDialogContent(
+                onDismiss = { navController.navigateUp() },
+                downLoad = {
+                    navController.navigate(NavRoute.DownloadDialog.route) {
+                        popUpTo(NavRoute.About.route)
+                    }
+                }
+            )
+        }
+
+        dialog(
+            route = NavRoute.DownloadDialog.route,
+            dialogProperties = DialogProperties(
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false
+            )
+        ) {
+            DownloadDialogContent(
+                viewModel = getStateViewModel(),
+                onDismiss = { navController.navigateUp() }
             )
         }
     }

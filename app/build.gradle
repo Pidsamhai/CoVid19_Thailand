@@ -22,6 +22,9 @@ android {
         versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "OWNER", "\"Pidsamhai\""
+        buildConfigField "String", "REPO", "\"CoVid19_Thailand\""
     }
     signingConfigs {
         release {
@@ -130,6 +133,14 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
     implementation "org.jetbrains.kotlinx:kotlinx-datetime:$Versions.kotlinx_datetime"
+
+    final def markwon_version = '4.2.0'
+
+    implementation "io.noties.markwon:core:$markwon_version"
+    implementation"io.noties.markwon:image-coil:$markwon_version"
+    implementation"io.noties.markwon:linkify:$markwon_version"
+
+    implementation 'com.navelplace:jsemver:0.1.5'
 
     /**
      * Fix JDK 11 Compile Error
