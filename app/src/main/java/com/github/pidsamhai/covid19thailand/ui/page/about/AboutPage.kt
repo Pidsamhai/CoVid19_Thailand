@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand
+package com.github.pidsamhai.covid19thailand.ui.page.about
 
 import android.widget.ImageView
 import android.widget.Toast
@@ -15,7 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.github.pidsamhai.covid19thailand.ui.update.UpdateDialog
+import com.github.pidsamhai.covid19thailand.R
+import com.github.pidsamhai.covid19thailand.ui.page.update.UpdateDialog
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.AboutPageVM
 import org.koin.androidx.compose.getViewModel
 

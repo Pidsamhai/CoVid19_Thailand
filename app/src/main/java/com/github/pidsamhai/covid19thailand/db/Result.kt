@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand
+package com.github.pidsamhai.covid19thailand.db
 
 sealed class Result<out T: Any> {
     object Initial: Result<Nothing>()

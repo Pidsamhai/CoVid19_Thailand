@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand.ui.today
+package com.github.pidsamhai.covid19thailand.ui.page.today
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -6,23 +6,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.github.pidsamhai.covid19thailand.R
-import com.github.pidsamhai.covid19thailand.Result
+import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
 import com.github.pidsamhai.covid19thailand.ui.callback.SubtitleCallback
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.ToDayViewModel
-import com.github.pidsamhai.covid19thailand.ui.widget.CardItem
-import com.github.pidsamhai.covid19thailand.ui.widget.CardItemDefault
 import com.github.pidsamhai.covid19thailand.ui.widget.ReportWidget
-import com.github.pidsamhai.covid19thailand.utilities.toCurrency
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.koin.androidx.compose.getStateViewModel
-import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun TodayPage(

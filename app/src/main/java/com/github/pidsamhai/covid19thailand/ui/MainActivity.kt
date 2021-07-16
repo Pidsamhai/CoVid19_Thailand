@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand
+package com.github.pidsamhai.covid19thailand.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

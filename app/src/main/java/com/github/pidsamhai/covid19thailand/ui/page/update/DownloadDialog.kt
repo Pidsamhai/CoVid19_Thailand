@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand.ui.update
+package com.github.pidsamhai.covid19thailand.ui.page.update
 
 import android.content.Intent
 import android.net.Uri
@@ -7,7 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
