@@ -3,6 +3,7 @@ package com.github.pidsamhai.covid19thailand.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
@@ -18,6 +19,7 @@ import com.github.pidsamhai.covid19thailand.ui.page.update.UpdateDialogContent
 import com.github.pidsamhai.covid19thailand.ui.page.worldwide.WorldWidePage
 import org.koin.androidx.compose.getStateViewModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NavGraph(
     navController: NavHostController,
@@ -57,6 +59,9 @@ fun NavGraph(
 
         dialog(
             NavRoute.UpdateDialog.route,
+            dialogProperties = DialogProperties(
+                usePlatformDefaultWidth = false
+            )
         ) {
             UpdateDialogContent(
                 onDismiss = { navController.navigateUp() },
