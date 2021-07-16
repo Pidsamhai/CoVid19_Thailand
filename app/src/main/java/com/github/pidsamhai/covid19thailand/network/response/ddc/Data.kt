@@ -3,12 +3,9 @@ package com.github.pidsamhai.covid19thailand.network.response.ddc
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.Entry
 import com.github.pidsamhai.covid19thailand.utilities.StatusColors
 import com.github.pidsamhai.covid19thailand.utilities.StatusTexts
 import com.google.gson.annotations.SerializedName
-import timber.log.Timber
 import java.io.Serializable
 
 @Entity(tableName = "timeline_data")
@@ -33,17 +30,6 @@ data class Data(
     @SerializedName("Recovered")
     val recovered: Int?
 )
-
-data class CoVidDataSets(
-    val confirmed: ArrayList<*>,
-    val death: ArrayList<*>,
-    val recovered: ArrayList<*>,
-    val date: ArrayList<*>
-) : Serializable {
-    fun toList(): List<ArrayList<*>> {
-        return listOf(confirmed, death, recovered)
-    }
-}
 
 data class LineDataSet(
     val title: String,

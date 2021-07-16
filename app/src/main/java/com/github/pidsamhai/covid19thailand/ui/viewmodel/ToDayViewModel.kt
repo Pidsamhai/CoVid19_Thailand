@@ -1,7 +1,7 @@
 package com.github.pidsamhai.covid19thailand.ui.viewmodel
 
 import androidx.lifecycle.*
-import com.github.pidsamhai.covid19thailand.Result
+import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
 import com.github.pidsamhai.covid19thailand.repository.Repository
 import kotlinx.coroutines.ExperimentalCoroutinesApi

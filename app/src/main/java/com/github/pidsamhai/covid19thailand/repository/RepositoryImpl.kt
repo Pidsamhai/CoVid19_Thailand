@@ -2,17 +2,17 @@ package com.github.pidsamhai.covid19thailand.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import com.github.pidsamhai.covid19thailand.Result
+import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.db.CoVid19Database
 import com.github.pidsamhai.covid19thailand.db.LastFetch
 import com.github.pidsamhai.covid19thailand.network.ApiResponse
 import com.github.pidsamhai.covid19thailand.network.api.CoVid19RapidApiServices
 import com.github.pidsamhai.covid19thailand.network.api.Covid19ApiServices
+import com.github.pidsamhai.covid19thailand.network.networkBoundResource
 import com.github.pidsamhai.covid19thailand.network.response.ddc.Data
 import com.github.pidsamhai.covid19thailand.network.response.ddc.TimeLine
 import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
-import com.github.pidsamhai.covid19thailand.networkBoundResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext

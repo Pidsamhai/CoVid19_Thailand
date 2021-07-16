@@ -1,13 +1,11 @@
-package com.github.pidsamhai.covid19thailand
+package com.github.pidsamhai.covid19thailand.network
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.liveData
-import com.github.pidsamhai.covid19thailand.network.ApiResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import timber.log.Timber
 import kotlinx.coroutines.delay
+import com.github.pidsamhai.covid19thailand.db.Result
 
 // ResultType: Type for the Resource data.
 // RequestType: Type for the API response.

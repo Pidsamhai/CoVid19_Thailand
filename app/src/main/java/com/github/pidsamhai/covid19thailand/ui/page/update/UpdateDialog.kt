@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand.ui.update
+package com.github.pidsamhai.covid19thailand.ui.page.update
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*

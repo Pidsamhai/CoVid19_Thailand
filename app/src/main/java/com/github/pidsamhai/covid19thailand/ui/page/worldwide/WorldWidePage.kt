@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand.ui.worldwide
+package com.github.pidsamhai.covid19thailand.ui.page.worldwide
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.pidsamhai.covid19thailand.Result
+import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
 import com.github.pidsamhai.covid19thailand.ui.callback.SubtitleCallback
 import com.github.pidsamhai.covid19thailand.ui.dialog.SelectCountryDialog

@@ -1,4 +1,4 @@
-package com.github.pidsamhai.covid19thailand.ui.timeline
+package com.github.pidsamhai.covid19thailand.ui.page.timeline
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -10,7 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
-import com.github.pidsamhai.covid19thailand.Result
+import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.response.ddc.Data
 import com.github.pidsamhai.covid19thailand.network.response.ddc.TimeLine
 import com.github.pidsamhai.covid19thailand.network.response.ddc.toDataSet
