@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.github.pidsamhai.covid19thailand.network.Download
-import com.github.pidsamhai.covid19thailand.ui.viewmodel.AboutViewModel
+import com.github.pidsamhai.covid19thailand.ui.viewmodel.UpdateDialogVM
 import com.github.pidsamhai.covid19thailand.ui.widget.MarkwonWidget
 import com.navelplace.jsemver.Version
 import org.koin.androidx.compose.getViewModel
@@ -38,7 +38,7 @@ fun UpdateDialog(
 fun UpdateDialogContent(
     onDismiss: () -> Unit,
     downLoad: () -> Unit = { },
-    aboutViewModel: AboutViewModel = getViewModel()
+    updateDialogVM: UpdateDialogVM = getViewModel()
 ) {
 
     val currentVersion = Version(BuildConfig.VERSION_NAME)
@@ -46,11 +46,11 @@ fun UpdateDialogContent(
     val scrollState = rememberScrollState()
 
     SideEffect {
-        aboutViewModel.getRelease()
+        updateDialogVM.getRelease()
     }
 
-    val release by aboutViewModel.releaseItem.observeAsState()
-    val download by aboutViewModel.download.collectAsState(null)
+    val release by updateDialogVM.releaseItem.observeAsState()
+    val download by updateDialogVM.download.collectAsState(null)
 
     Card(
         modifier = Modifier.padding(16.dp),
@@ -128,7 +128,7 @@ fun UpdateDialogContent(
                 if (release != null) {
                     if(currentVersion.olderThan(Version(release?.tagName!!))) {
                         TextButton(onClick = {
-                            aboutViewModel.saveReleaseItem()
+                            updateDialogVM.saveReleaseItem()
                             downLoad()
                         }) {
                             Text(text = "DOWNLOAD")

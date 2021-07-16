@@ -24,9 +24,9 @@ import com.github.pidsamhai.covid19thailand.utilities.DATABASE_NAME
 )
 @TypeConverters(TypeConverter::class)
 abstract class CoVid19Database : RoomDatabase() {
-    abstract fun todayDao(): TodayDao
-    abstract fun timeLineDao(): TimeLineDao
-    abstract fun rapidDao(): RapidDao
+    abstract val todayDao: TodayDao
+    abstract val timeLineDao: TimeLineDao
+    abstract val rapidDao: RapidDao
 
     companion object {
         @Volatile

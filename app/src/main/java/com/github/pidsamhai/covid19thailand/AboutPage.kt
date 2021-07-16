@@ -1,12 +1,14 @@
 package com.github.pidsamhai.covid19thailand
 
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -14,13 +16,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.pidsamhai.covid19thailand.ui.update.UpdateDialog
-import com.github.pidsamhai.covid19thailand.ui.viewmodel.AboutViewModel
+import com.github.pidsamhai.covid19thailand.ui.viewmodel.AboutPageVM
 import org.koin.androidx.compose.getViewModel
+
+@Composable
+fun AboutPage(
+    openUpdateDialog: () -> Unit = { },
+    viewModel: AboutPageVM = getViewModel()
+) {
+    val context = LocalContext.current
+    AboutPageContent(
+        openUpdateDialog = openUpdateDialog,
+        clearDatabase = {
+            viewModel.clearDatabase {
+                Toast.makeText(context, "Cleared", Toast.LENGTH_SHORT).show()
+            }
+        }
+    )
+}
 
 @Preview(showBackground = true)
 @Composable
-fun AboutPage(
-    openUpdateDialog: () -> Unit = { }
+private fun AboutPageContent(
+    openUpdateDialog: () -> Unit = { },
+    clearDatabase: () -> Unit = { }
 ) {
     var showUpdateDialog by remember { mutableStateOf(false) }
 
@@ -78,7 +97,7 @@ fun AboutPage(
                 Text(text = stringResource(id = R.string.check_update).uppercase())
             }
 
-            Button(onClick = { }) {
+            Button(onClick = { clearDatabase() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_delete_forever),
                     contentDescription = null

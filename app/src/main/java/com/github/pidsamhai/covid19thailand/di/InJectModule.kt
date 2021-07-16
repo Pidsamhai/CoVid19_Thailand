@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.lifecycle.SavedStateHandle
 import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.github.pidsamhai.covid19thailand.db.CoVid19Database
 import com.github.pidsamhai.covid19thailand.db.LastFetch
@@ -29,15 +28,15 @@ val databaseModule = module {
     }
 
     fun getRapidDao(database: CoVid19Database): RapidDao {
-        return database.rapidDao()
+        return database.rapidDao
     }
 
     fun getTodayDao(database: CoVid19Database): TodayDao {
-        return database.todayDao()
+        return database.todayDao
     }
 
     fun getTimelinedayDao(database: CoVid19Database): TimeLineDao {
-        return database.timeLineDao()
+        return database.timeLineDao
     }
 
     fun getDefaultPref(application: Application): SharedPreferences {
@@ -58,7 +57,7 @@ val repositoryModule = module {
     single { CoVid19RapidApiServices.create() }
     single { GithubApiService.create() }
     single<DownloadUpdateService> { DownloadUpdateServiceImpl() }
-    single<Repository> { RepositoryImpl(get(), get(), get(), get(), get(), get()) }
+    single<Repository> { RepositoryImpl(get(), get(), get(), get()) }
     single<GithubRepository> { GithubRepositoryImpl(get(), get()) }
 }
 
@@ -66,8 +65,9 @@ val viewModelModule = module {
     viewModel { ToDayViewModel(get(), get()) }
     viewModel { TimeLineViewModel(get()) }
     viewModel { WorldWideModel(get(), get()) }
-    viewModel { AboutViewModel(get(), get()) }
+    viewModel { UpdateDialogVM(get(), get()) }
     viewModel { DownloadDialogVM(get(), get(), get()) }
+    viewModel { AboutPageVM(get()) }
     single { (activity: Activity) ->
         GitRelease(activity,
                 OWNER,

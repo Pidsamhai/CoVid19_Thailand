@@ -20,7 +20,7 @@ data class DownloadParams(
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AboutViewModel(
+class UpdateDialogVM(
     private val githubRepository: GithubRepository,
     private val lastFetch: LastFetch
 ) : ViewModel() {

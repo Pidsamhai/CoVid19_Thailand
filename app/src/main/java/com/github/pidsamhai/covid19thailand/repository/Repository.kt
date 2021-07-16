@@ -19,4 +19,5 @@ interface Repository {
     fun getStatic(country: String): LiveData<Result<Static>>
     fun getTimeLineLiveData(): LiveData<Result<TimeLine>>
     fun getTimeLineDataLiveData(): LiveData<Result<List<Data>>>
+    fun clearDataBase()
 }
