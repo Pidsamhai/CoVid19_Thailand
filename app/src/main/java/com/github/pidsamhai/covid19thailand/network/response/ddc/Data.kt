@@ -1,6 +1,7 @@
 package com.github.pidsamhai.covid19thailand.network.response.ddc
 
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.github.pidsamhai.covid19thailand.utilities.StatusColors
@@ -8,6 +9,7 @@ import com.github.pidsamhai.covid19thailand.utilities.StatusTexts
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
+@Keep
 @Entity(tableName = "timeline_data")
 data class Data(
     @SerializedName("Confirmed")

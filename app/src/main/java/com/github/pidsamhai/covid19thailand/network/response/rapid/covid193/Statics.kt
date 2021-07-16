@@ -1,9 +1,11 @@
 package com.github.pidsamhai.covid19thailand.network.response.rapid.covid193
 
 
+import androidx.annotation.Keep
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base.Datas
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class Statics(
     @SerializedName("response")
     val datas: List<Datas>?

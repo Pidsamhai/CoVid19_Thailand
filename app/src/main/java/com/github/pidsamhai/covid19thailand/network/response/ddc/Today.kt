@@ -1,10 +1,12 @@
 package com.github.pidsamhai.covid19thailand.network.response.ddc
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
+@Keep
 @Entity(tableName = "today")
 data class Today(
     @SerializedName("Confirmed")

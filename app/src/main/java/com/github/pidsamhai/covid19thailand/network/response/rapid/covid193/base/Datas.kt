@@ -1,11 +1,13 @@
 package com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base
 
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
+@Keep
 @Entity(tableName = "rapid_statics")
 data class Datas(
     @SerializedName("cases")

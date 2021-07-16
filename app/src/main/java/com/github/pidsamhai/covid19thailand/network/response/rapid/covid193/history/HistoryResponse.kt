@@ -1,7 +1,9 @@
 package com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.history
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class HistoryResponse(
     @SerializedName("response")
     val histories: List<History>?

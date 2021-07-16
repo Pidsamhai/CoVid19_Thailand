@@ -1,8 +1,10 @@
 package com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base
 
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class Cases(
     @SerializedName("active")
     val active: Int?,

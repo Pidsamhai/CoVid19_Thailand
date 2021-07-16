@@ -1,5 +1,6 @@
 package com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.history
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base.Cases
@@ -7,6 +8,7 @@ import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base.Tests
 import com.google.gson.annotations.SerializedName
 
+@Keep
 @Entity(tableName = "rapid_history")
 data class History(
     @SerializedName("cases")
