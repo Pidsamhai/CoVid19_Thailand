@@ -77,7 +77,8 @@ fun NavGraph(
             route = NavRoute.DownloadDialog.route,
             dialogProperties = DialogProperties(
                 dismissOnBackPress = false,
-                dismissOnClickOutside = false
+                dismissOnClickOutside = false,
+                usePlatformDefaultWidth = false
             )
         ) {
             DownloadDialogContent(
