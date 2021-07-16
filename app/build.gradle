@@ -1,9 +1,13 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-parcelize'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.android'
+    id "com.gladed.androidgitversion" version "0.4.13"
+}
+
 apply from: "$rootDir/dependencies.gradle"
-apply plugin: 'org.jetbrains.kotlin.android'
 
 Properties properties = new Properties()
 File propertiesFile = new File('key.properties')
@@ -12,14 +16,23 @@ propertiesFile.withInputStream {
 }
 
 android {
+
+    androidGitVersion {
+        codeFormat = "MNNPPPRR"
+    }
+
     compileSdkVersion 30
 
     defaultConfig {
         applicationId "com.github.pidsamhai.covid19thailand"
         minSdkVersion 22
         targetSdkVersion 30
-        versionCode 2
-        versionName "1.0.0"
+        if (androidGitVersion.code() == 0) {
+            versionCode 1
+        } else  {
+          versionCode androidGitVersion.code()
+        }
+        versionName androidGitVersion.name()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
