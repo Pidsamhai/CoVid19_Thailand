@@ -96,9 +96,17 @@ fun UpdateDialogContent(
                 }
             }
             if (release == null){
-                CircularProgressIndicator(
-                    modifier = Modifier.size(60.dp)
-                )
+                Row(
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start)
+                ) {
+                    CircularProgressIndicator()
+                    Text(
+                        text = "Loading...",
+                        fontSize = 12.sp
+                    )
+                }
             }
 
             when(download) {
