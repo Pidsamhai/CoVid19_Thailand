@@ -1,5 +1,6 @@
 package com.github.pidsamhai.covid19thailand.network.api
 
+import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.github.pidsamhai.covid19thailand.network.response.ddc.TimeLine
 import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
 import okhttp3.OkHttpClient
@@ -12,18 +13,20 @@ private const val BASE_URL = "https://covid19.th-stat.com/json/covid19v2/"
 
 interface Covid19ApiServices {
     @GET("getTodayCases.json")
-    suspend fun getToDay() : Today
+    suspend fun getToDay(): Today
 
     @GET("getTimeline.json")
-    suspend fun getTimeline() : TimeLine
+    suspend fun getTimeline(): TimeLine
 
     companion object {
         fun create(): Covid19ApiServices {
-            val okHttpClient = OkHttpClient.Builder()
-                .addNetworkInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
-                .build()
+            val okHttpClient = OkHttpClient.Builder().apply {
+                if (BuildConfig.DEBUG) {
+                    addNetworkInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
+                }
+            }.build()
 
 
             return Retrofit.Builder()

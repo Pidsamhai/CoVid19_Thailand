@@ -28,10 +28,13 @@ class DownloadUpdateServiceImpl : DownloadUpdateService {
                         )
                     )
                     .build()
+            }.apply {
+                if (BuildConfig.DEBUG) {
+                    addNetworkInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
+                }
             }
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
             .build()
     }
 

@@ -1,5 +1,6 @@
 package com.github.pidsamhai.covid19thailand.network.api
 
+import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Statics
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.history.HistoryResponse
@@ -44,12 +45,14 @@ interface CoVid19RapidApiServices {
                 return@Interceptor chain.proceed(request)
             }
 
-            val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(requestInterceptor)
-                .addNetworkInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
-                .build()
+            val okHttpClient = OkHttpClient.Builder().apply {
+                addInterceptor(requestInterceptor)
+                if (BuildConfig.DEBUG) {
+                    addNetworkInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
+                }
+            }.build()
 
             return Retrofit.Builder()
                 .client(okHttpClient)

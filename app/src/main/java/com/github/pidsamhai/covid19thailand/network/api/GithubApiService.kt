@@ -1,5 +1,6 @@
 package com.github.pidsamhai.covid19thailand.network.api
 
+import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.github.pidsamhai.covid19thailand.network.response.github.Release
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -36,12 +37,14 @@ interface GithubApiService {
                 return@Interceptor chain.proceed(request)
             }
 
-            val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(requestInterceptor)
-                .addNetworkInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
-                .build()
+            val okHttpClient = OkHttpClient.Builder().apply {
+                addInterceptor(requestInterceptor)
+                if (BuildConfig.DEBUG) {
+                    addNetworkInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
+                }
+            }.build()
 
             return Retrofit.Builder()
                 .client(okHttpClient)
