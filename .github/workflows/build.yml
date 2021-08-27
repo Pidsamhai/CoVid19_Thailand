@@ -62,9 +62,6 @@ jobs:
         env:
           NATIVE_CPP: ${{ secrets.NATIVE_CPP }}
 
-      - name: Build Apk
-        run: bash ./gradlew :app:assemble
-
       # create google-services.json
       - name: Create google-services.json
         run: |
