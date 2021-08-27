@@ -14,6 +14,7 @@ import com.github.pidsamhai.covid19thailand.repository.GithubRepositoryImpl
 import com.github.pidsamhai.covid19thailand.repository.Repository
 import com.github.pidsamhai.covid19thailand.repository.RepositoryImpl
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.*
+import com.google.firebase.FirebaseApp
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
@@ -54,7 +55,7 @@ val repositoryModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { ToDayViewModel(get(), get()) }
+    viewModel { ToDayViewModel(get(), get(), get()) }
     viewModel { TimeLineViewModel(get()) }
     viewModel { WorldWideModel(get(), get()) }
     viewModel { UpdateDialogVM(get(), get()) }

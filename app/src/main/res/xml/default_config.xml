@@ -2,6 +2,6 @@
 <defaultsMap>
     <entry>
         <key>notification</key>
-        <value>{}</value>
+        <value />
     </entry>
 </defaultsMap>
