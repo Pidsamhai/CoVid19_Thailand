@@ -65,6 +65,17 @@ jobs:
       - name: Build Apk
         run: bash ./gradlew :app:assemble
 
+      # create google-services.json
+      - name: Create google-services.json
+        run: |
+          echo $GOOGLE_SERVICES > app/google-services.out
+          base64 -di app/google-services.out > app/google-services.json
+        env:
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+
+      - name: Build Apk
+        run: bash ./gradlew :app:assemble
+
       # create checksum
       - name: Create Checksum
         run: |
