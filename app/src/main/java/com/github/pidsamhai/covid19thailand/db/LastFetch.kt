@@ -6,9 +6,11 @@ interface LastFetch {
     val shouldFetchToday: Boolean
     val shouldFetchTimeLine: Boolean
     val shouldFetchCountry: Boolean
+    val shouldFetchTodayByProvince: Boolean
 
     fun saveLastFetch(key: String)
     fun saveLastFetchToday()
+    fun saveLastFetchTodayByProvince()
     fun saveLastFetchTimeline()
     fun saveLastFetchCountry()
 

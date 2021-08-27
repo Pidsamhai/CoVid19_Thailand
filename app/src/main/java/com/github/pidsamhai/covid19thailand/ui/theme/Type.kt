@@ -11,8 +11,8 @@ import com.github.pidsamhai.covid19thailand.R
 
 
 val IBMPlexLooped = FontFamily(
-        Font(R.font.ibm_plex_sans_thai_looped_old, FontWeight.Bold),
-        Font(R.font.ibm_plex_sans_thai_looped_old, FontWeight.Bold, FontStyle.Italic),
+        Font(R.font.ibm_plex_sans_thai_looped_bold, FontWeight.Bold),
+        Font(R.font.ibm_plex_sans_thai_looped_bold, FontWeight.Bold, FontStyle.Italic),
         Font(R.font.ibm_plex_sans_thai_looped_medium, FontWeight.Normal, FontStyle.Italic),
         Font(R.font.ibm_plex_sans_thai_looped_regular, FontWeight.Normal),
 )

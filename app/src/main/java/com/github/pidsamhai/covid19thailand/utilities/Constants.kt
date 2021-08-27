@@ -2,7 +2,10 @@ package com.github.pidsamhai.covid19thailand.utilities
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import timber.log.Timber
 
 const val DATABASE_NAME = "covid19-db"
 const val OWNER = " Pidsamhai"
@@ -11,15 +14,17 @@ const val REPOSITORY = "CoVid19_Thailand"
 val StatusColors = listOf("#FFFF00", "#FF0000", "#00FF00")
 val StatusTexts = listOf("Confirmed", "Death", "Recovered")
 
-val DDC_DATE_PATTERN = "^[\\d]{2}[/][\\d]{2}[/][\\d]{4}[\\s][\\d]{2}[:][\\d]{2}\$".toRegex()
+val DDC_DATE_PATTERN = "^[\\d]{4}[-][\\d]{2}[-][\\d]{2}[\\s].*\$".toRegex()
 
 fun ddcDateReformat(string: String): String {
-    val date = string.split(" ").first().split("/").reversed().joinToString("-")
-    val time = (string.split(" ").lastOrNull() ?: "00:00") + ":00"
-    return "${date}T$time"
+    val date = string.split(" ")
+    Timber.d("${date.first()}T${date.last()}")
+    return "${date.first()}T${date.last()}"
 }
 
-fun String?.toLastUpdate(): String? {
+const val DEFAULT_LAST_UPDATE_TEMPLATE = "( อัพเดทล่าสุด %s )"
+
+fun String?.toLastUpdate(template: String = DEFAULT_LAST_UPDATE_TEMPLATE): String? {
     var datetime: String? = null
     if (this != null) {
         val parserDate = if (this.matches(DDC_DATE_PATTERN)) {
@@ -28,13 +33,26 @@ fun String?.toLastUpdate(): String? {
             /**
              * Force remove TimeZone
              * TimeZone not work
+             * 2020-06-02T20:45:06+00:00
              */
             this.split("+")[0].toLocalDateTime()
         }
-        datetime = "${parserDate.dayOfMonth}/${parserDate.monthNumber + 1}/${parserDate.year} " +
+        datetime = "${parserDate.dayOfMonth}/${parserDate.monthNumber}/${parserDate.year} " +
                 "${parserDate.hour}:${parserDate.minute}"
     }
-    return if (datetime != null) "( อัพเดทล่าสุด $datetime )" else datetime
+    return if (datetime != null) template.format(datetime) else datetime
+}
+
+fun updateTime(): String {
+    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    return "อัพเดทล่าสุด %s/%s/%s %s:%s:%s".format(
+        now.dayOfMonth,
+        now.monthNumber,
+        now.year,
+        now.hour,
+        now.minute,
+        now.second
+    )
 }
 
 object Keys {

@@ -57,14 +57,14 @@ private fun TodayPageContent(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         ReportWidget(
-            confirmed = today?.confirmed,
-            newConfirmed = today?.newConfirmed,
-            recovered = today?.recovered,
-            newRecovered = today?.newRecovered,
-            hospitalized = today?.hospitalized,
-            newHospitalized = today?.newHospitalized,
-            deaths = today?.deaths,
-            newDeaths = today?.newDeaths
+            confirmed = today?.totalCase,
+            newConfirmed = today?.newCase,
+            recovered = null,
+            newRecovered = null,
+            hospitalized = null,
+            newHospitalized = null,
+            deaths = null,
+            newDeaths = null
         )
     }
 }
@@ -74,16 +74,12 @@ private fun TodayPageContent(
 private fun TodayPagePreview() {
     TodayPageContent(
         today = Today(
-            confirmed = 100,
-            newConfirmed = 20,
-            deaths = 150,
-            newDeaths = 1,
-            recovered = 10,
-            newRecovered = 1,
-            hospitalized = 70,
-            newHospitalized = 7,
+            newCase = 100,
+            newCaseExcludeAbroad = 20,
+            totalCase = 150,
+            totalCaseExcludeAbroad = 1,
             updateDate = "10/10/2021",
-            devBy = "FuckOff"
+            txnDate = "10/10/2021"
         )
     )
 }

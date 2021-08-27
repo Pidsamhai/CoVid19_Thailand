@@ -2,16 +2,14 @@ package com.github.pidsamhai.covid19thailand.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.db.CoVid19Database
 import com.github.pidsamhai.covid19thailand.db.LastFetch
+import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.ApiResponse
 import com.github.pidsamhai.covid19thailand.network.api.CoVid19RapidApiServices
 import com.github.pidsamhai.covid19thailand.network.api.Covid19ApiServices
 import com.github.pidsamhai.covid19thailand.network.networkBoundResource
-import com.github.pidsamhai.covid19thailand.network.response.ddc.Data
-import com.github.pidsamhai.covid19thailand.network.response.ddc.TimeLine
-import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
+import com.github.pidsamhai.covid19thailand.network.response.ddc.*
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +22,7 @@ class RepositoryImpl(
     private val database: CoVid19Database,
     private val lastFetch: LastFetch
 ) : Repository {
-    override suspend fun getToday(): ApiResponse<Today> {
+    override suspend fun getToday(): ApiResponse<TodayResponse> {
         return try {
             val result = covid19ApiServices.getToDay()
             lastFetch.saveLastFetchToday()
@@ -84,14 +82,65 @@ class RepositoryImpl(
         }
     ).asLiveData()
 
-    override fun getTodayLiveData(): Flow<Result<Today>> = networkBoundResource(
+    override fun getTodayFlow(): Flow<Result<Today>> = networkBoundResource(
         loadFromDb = { withContext(Dispatchers.IO) { database.todayDao.hashData() } },
-        saveCallResult = { withContext(Dispatchers.IO) { database.todayDao.upSert(it) } },
+        saveCallResult = {
+            withContext(Dispatchers.IO) {
+                it.today?.let { today -> database.todayDao.upSert(today) }
+            }
+        },
         shouldFetch = { lastFetch.shouldFetchToday || it == null },
         createCall = {
             try {
                 ApiResponse.Success(covid19ApiServices.getToDay()).also {
                     lastFetch.saveLastFetchToday()
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+                ApiResponse.Error(e)
+            }
+        }
+    )
+
+    override fun getTodayByProvince(province: String): Flow<Result<TodayByProvince>> =
+        networkBoundResource(
+            loadFromDb = {
+                withContext(Dispatchers.IO) {
+                    database.todayByProvince.getTodayByProvince(
+                        province
+                    )
+                }
+            },
+            saveCallResult = {
+                withContext(Dispatchers.IO) {
+                    database.todayByProvince.upSert(it)
+                }
+            },
+            shouldFetch = { lastFetch.shouldFetchTodayByProvince || it == null },
+            createCall = {
+                try {
+                    ApiResponse.Success(covid19ApiServices.getTodayCaseByProvince()).also {
+                        lastFetch.saveLastFetchTodayByProvince()
+                    }
+                } catch (e: Exception) {
+                    Timber.e(e)
+                    ApiResponse.Error(e)
+                }
+            }
+        )
+
+    override fun getTodayByProvinces(forceRefresh: Boolean): Flow<Result<List<TodayByProvince>>> = networkBoundResource(
+        loadFromDb = { withContext(Dispatchers.IO) { database.todayByProvince.getTodayByProvinces() } },
+        saveCallResult = {
+            withContext(Dispatchers.IO) {
+                database.todayByProvince.upSert(it)
+            }
+        },
+        shouldFetch = { (lastFetch.shouldFetchTodayByProvince || it == null) || forceRefresh },
+        createCall = {
+            try {
+                ApiResponse.Success(covid19ApiServices.getTodayCaseByProvince()).also {
+                    lastFetch.saveLastFetchTodayByProvince()
                 }
             } catch (e: Exception) {
                 Timber.e(e)

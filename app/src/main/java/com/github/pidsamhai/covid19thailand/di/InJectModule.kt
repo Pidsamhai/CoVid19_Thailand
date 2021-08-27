@@ -3,6 +3,8 @@ package com.github.pidsamhai.covid19thailand.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.github.pidsamhai.covid19thailand.R
+import com.github.pidsamhai.covid19thailand.appwidget.WidgetConfigureVm
 import com.github.pidsamhai.covid19thailand.db.CoVid19Database
 import com.github.pidsamhai.covid19thailand.db.LastFetch
 import com.github.pidsamhai.covid19thailand.db.LastFetchImpl
@@ -12,8 +14,13 @@ import com.github.pidsamhai.covid19thailand.repository.GithubRepositoryImpl
 import com.github.pidsamhai.covid19thailand.repository.Repository
 import com.github.pidsamhai.covid19thailand.repository.RepositoryImpl
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.*
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -26,7 +33,12 @@ val databaseModule = module {
         return application.getSharedPreferences("lastFetch", Context.MODE_PRIVATE)
     }
 
+    fun getWidgetPref(application: Application): SharedPreferences {
+        return application.getSharedPreferences("widget", Context.MODE_PRIVATE)
+    }
+
     single { getDatabase(androidApplication()) }
+    single(named("widgetPref")) { getWidgetPref(androidApplication()) }
     single { getDefaultPref(get()) }
     single<LastFetch> { LastFetchImpl(get()) }
 
@@ -48,4 +60,20 @@ val viewModelModule = module {
     viewModel { UpdateDialogVM(get(), get()) }
     viewModel { DownloadDialogVM(get(), get(), get()) }
     viewModel { AboutPageVM(get()) }
+    viewModel { WidgetConfigureVm(get(), get(named("widgetPref"))) }
+}
+
+val appModule = module {
+    fun provideRemoteConfig(): FirebaseRemoteConfig {
+        return Firebase.remoteConfig.apply {
+            setConfigSettingsAsync(
+                remoteConfigSettings {
+                    minimumFetchIntervalInSeconds = 3600
+                }
+            )
+            setDefaultsAsync(R.xml.default_config)
+        }
+    }
+
+    single { provideRemoteConfig() }
 }

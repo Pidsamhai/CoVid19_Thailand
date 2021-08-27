@@ -8,8 +8,12 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 @Keep
-@Entity(tableName = "today")
-data class Today(
+@Entity(tableName = "today_by_province")
+data class TodayByProvince(
+    @PrimaryKey
+    @ColumnInfo(name = "province")
+    @SerializedName("province")
+    val province: String,
     @ColumnInfo(name = "newCase")
     @SerializedName("new_case")
     val newCase: Int?,
@@ -25,8 +29,7 @@ data class Today(
     @ColumnInfo(name = "txnDate")
     @SerializedName("txn_date")
     val txnDate: String?,
-    @PrimaryKey
     @ColumnInfo(name = "updateDate")
     @SerializedName("update_date")
-    val updateDate: String
+    val updateDate: String?
 )

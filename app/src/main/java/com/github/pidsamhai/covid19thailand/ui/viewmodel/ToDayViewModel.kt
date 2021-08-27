@@ -15,7 +15,7 @@ class ToDayViewModel(
     private val refreshKey = MutableLiveData(System.currentTimeMillis())
 
     val today: LiveData<Result<Today>> = refreshKey.switchMap {
-        repository.getTodayLiveData().asLiveData()
+        repository.getTodayFlow().asLiveData()
     }
 
     fun refresh() = viewModelScope.launch { refreshKey.value = System.currentTimeMillis() }

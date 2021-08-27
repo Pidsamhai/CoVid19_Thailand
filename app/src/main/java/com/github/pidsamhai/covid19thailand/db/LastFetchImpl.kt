@@ -16,6 +16,8 @@ class LastFetchImpl(
         get() = calculateExpTime(ShouldFetchTimeLineKey) >= EXP_MINUTE
     override val shouldFetchCountry: Boolean
         get() = calculateExpTime(ShouldFetchCountryKey) >= EXP_MINUTE
+    override val shouldFetchTodayByProvince: Boolean
+        get() = calculateExpTime(ShouldFetchTodayKeyByProvince) >= EXP_MINUTE
 
     override fun saveLastFetch(key: String) {
         val now = Clock.System.now().toEpochMilliseconds()
@@ -38,6 +40,8 @@ class LastFetchImpl(
     }
 
     override fun saveLastFetchToday() = saveLastFetch(ShouldFetchTodayKey)
+
+    override fun saveLastFetchTodayByProvince() = saveLastFetch(ShouldFetchTodayKeyByProvince)
 
     override fun saveLastFetchTimeline() = saveLastFetch(ShouldFetchTimeLineKey)
 
@@ -62,6 +66,7 @@ class LastFetchImpl(
     companion object {
         private const val EXP_MINUTE = 10L
         private const val ShouldFetchTodayKey = "ShouldFetchTodayKey"
+        private const val ShouldFetchTodayKeyByProvince = "ShouldFetchTodayKeyByProvince"
         private const val ShouldFetchTimeLineKey = "ShouldFetchTimeLine"
         private const val ShouldFetchCountryKey = "ShouldFetchCountry"
         private const val ReleaseItemKey = "ReleaseItem"

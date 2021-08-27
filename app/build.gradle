@@ -108,7 +108,8 @@ dependencies {
 
     implementation "androidx.compose.ui:ui:$Versions.compose"
     // Tooling support (Previews, etc.)
-    implementation "androidx.compose.ui:ui-tooling:1.0.0-beta09"
+    implementation "androidx.compose.ui:ui-tooling-preview:$Versions.compose"
+    debugImplementation "androidx.compose.ui:ui-tooling:$Versions.compose"
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
     implementation "androidx.compose.foundation:foundation:$Versions.compose"
     // Material Design
@@ -130,6 +131,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-swiperefresh:$Versions.acc_companist"
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$Versions.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$Versions.lifecycle"
     implementation "org.jetbrains.kotlinx:kotlinx-datetime:$Versions.kotlinx_datetime"
 
     implementation "io.noties.markwon:core:$Versions.markwon"
@@ -137,6 +139,10 @@ dependencies {
     implementation"io.noties.markwon:linkify:$Versions.markwon"
 
     implementation "com.navelplace:jsemver:$Versions.jsemver"
+
+    implementation platform('com.google.firebase:firebase-bom:28.4.0')
+    implementation 'com.google.firebase:firebase-config-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     /**
      * Fix JDK 11 Compile Error
