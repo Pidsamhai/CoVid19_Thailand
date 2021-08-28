@@ -40,7 +40,7 @@ private fun BodyContent() {
 
     val routes = listOf(
         NavRoute.Today,
-        NavRoute.TimeLine,
+//        NavRoute.TimeLine,
         NavRoute.WorldWide,
         NavRoute.About,
     )
