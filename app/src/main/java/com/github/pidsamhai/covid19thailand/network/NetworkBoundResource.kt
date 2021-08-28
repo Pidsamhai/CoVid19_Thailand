@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.delay
 import com.github.pidsamhai.covid19thailand.db.Result
+import timber.log.Timber
 
 // ResultType: Type for the Resource data.
 // RequestType: Type for the API response.
@@ -95,7 +96,13 @@ inline fun <ResultType: Any, RequestType: Any> networkBoundResource(
 
                     delay(60)
                     saveCallResult(res.data)
-                    emit(Result.Success(loadFromDb()!!))
+                    val data = loadFromDb()
+                    Timber.d("Data %s", data.toString())
+                    if (data != null) {
+                        emit(Result.Success(data))
+                    } else {
+                        emit(Result.Fail)
+                    }
                 }
 
                 is ApiResponse.Error -> emit(Result.Fail)
