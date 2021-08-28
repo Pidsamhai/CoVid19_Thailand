@@ -20,5 +20,5 @@ interface TodayDao {
     fun getToDayFlow() : Flow<Today>
 
     @Query("SELECT * FROM today ORDER BY updateDate DESC LIMIT 1")
-    fun hashData() : Today?
+    fun hashData() : Flow<Today?>
 }

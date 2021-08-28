@@ -10,6 +10,7 @@ import com.github.pidsamhai.covid19thailand.network.api.CoVid19RapidApiServices
 import com.github.pidsamhai.covid19thailand.network.api.Covid19ApiServices
 import com.github.pidsamhai.covid19thailand.network.networkBoundResource
 import com.github.pidsamhai.covid19thailand.network.response.ddc.*
+import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Country
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -44,61 +45,36 @@ class RepositoryImpl(
         }
     }
 
-    override fun getCountryLiveData(): LiveData<Result<List<String>>> = networkBoundResource(
-        loadFromDb = { withContext(Dispatchers.IO) { database.rapidDao.getCountries() } },
-        saveCallResult = {
-            withContext(Dispatchers.IO) {
-                database.rapidDao.upSertStatics(it.getStaticDatas())
-            }
+    override fun getCountries(): Flow<Result<List<String>>> = networkBoundResource(
+        query = { database.rapidDao.getCountries() },
+        saveFetchResult = {
+            database.rapidDao.upSertCountries(it.countries)
         },
-        shouldFetch = { true },
-        createCall = {
-            try {
-                ApiResponse.Success(rapidApiServices.getStatics())
-            } catch (e: Exception) {
-                Timber.e(e)
-                ApiResponse.Error(e)
-            }
-        }
-    ).asLiveData()
+        shouldFetch = { it?.isNullOrEmpty() == true },
+        fetch = { rapidApiServices.getCountries() }
+    )
 
     override fun getStatic(country: String): LiveData<Result<Static>> = networkBoundResource(
-        loadFromDb = { withContext(Dispatchers.IO) { database.rapidDao.getStaticX(country) } },
-        saveCallResult = {
-            withContext(Dispatchers.IO) {
-                database.rapidDao.upSert(it.apply {
-                    it.pk = country
-                })
-            }
+        query = { database.rapidDao.getStaticX(country) },
+        saveFetchResult = {
+            database.rapidDao.upSert(it.apply {
+                it.pk = country
+            })
         },
-        shouldFetch = { true },
-        createCall = {
-            try {
-                ApiResponse.Success(rapidApiServices.getStatic(country))
-            } catch (e: Exception) {
-                Timber.e(e)
-                ApiResponse.Error(e)
-            }
+        fetch = {
+            rapidApiServices.getStatic(country)
         }
     ).asLiveData()
 
     override fun getTodayFlow(): Flow<Result<Today>> = networkBoundResource(
-        loadFromDb = { withContext(Dispatchers.IO) { database.todayDao.hashData() } },
-        saveCallResult = {
-            withContext(Dispatchers.IO) {
-                it.today?.let { today -> database.todayDao.upSert(today) }
-            }
+        query = { database.todayDao.hashData() },
+        saveFetchResult = {
+            it.today?.let { it1 -> database.todayDao.upSert(it1) }
+            lastFetch.saveLastFetchToday()
         },
         shouldFetch = { lastFetch.shouldFetchToday || it == null },
-        createCall = {
-            try {
-                ApiResponse.Success(covid19ApiServices.getToDay()).also {
-                    lastFetch.saveLastFetchToday()
-                }
-            } catch (e: Exception) {
-                Timber.e(e)
-                ApiResponse.Error(e)
-            }
+        fetch = {
+            covid19ApiServices.getToDay()
         }
     )
 

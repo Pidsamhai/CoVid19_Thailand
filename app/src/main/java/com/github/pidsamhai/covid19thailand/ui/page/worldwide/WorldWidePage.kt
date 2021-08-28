@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,14 +33,14 @@ fun WorldWidePage(
     viewModel: WorldWideModel = getStateViewModel(),
     subtitleCallback: SubtitleCallback = { }
 ) {
-    val countriesResult by viewModel.countriesX.observeAsState(initial = Result.Initial)
+    val countriesResult by viewModel.countries.collectAsState(initial = Result.Initial)
     val staticResult by viewModel.static.observeAsState(initial = Result.Initial)
 
     var showState by remember { mutableStateOf(false) }
-    var selectedCountry by remember { mutableStateOf("Please Select area...") }
+    var selectedCountry by rememberSaveable{ mutableStateOf("Please Select area...") }
     var countries by remember { mutableStateOf(listOf<String>()) }
     var static by remember { mutableStateOf<Static?>(null) }
-    val isLoading = countriesResult is Result.Loading
+    val isLoading = countriesResult is Result.Loading || staticResult is Result.Loading
     val swipeState = rememberSwipeRefreshState(isRefreshing = isLoading)
 
     val onSelectedCountry: (country: String) -> Unit = {
@@ -63,7 +64,7 @@ fun WorldWidePage(
         selected = { onSelectedCountry(it) },
         showDialog = showState,
         onDismiss = { showState = false },
-        items = countries
+        items = listOf("All") + countries
     )
 
     SwipeRefresh(
@@ -71,7 +72,9 @@ fun WorldWidePage(
         onRefresh = { viewModel.refresh() }
     ) {
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             Row(
                 modifier = Modifier

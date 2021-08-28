@@ -1,6 +1,7 @@
 package com.github.pidsamhai.covid19thailand.network.api
 
 import com.github.pidsamhai.covid19thailand.BuildConfig
+import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.CountiesResponse
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Statics
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.history.HistoryResponse
@@ -33,6 +34,8 @@ interface CoVid19RapidApiServices {
     @GET("statistics")
     suspend fun getStatic(@Query("country") country: String): Static
 
+    @GET("countries")
+    suspend fun getCountries(): CountiesResponse
 
     companion object {
         fun create(): CoVid19RapidApiServices {

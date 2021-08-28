@@ -5,9 +5,11 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Country
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base.Datas
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.history.History
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RapidDao {
@@ -19,6 +21,9 @@ interface RapidDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upSertHistories(history: List<History>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun upSertCountries(countries: List<Country>)
 
     @Query("SELECT * FROM rapid_history WHERE historyPk LIKE '%' || :country || '%' ORDER BY time asc")
     fun getHistory(country: String): LiveData<List<History>>
@@ -36,14 +41,11 @@ interface RapidDao {
     fun getStaticReal(country: String): LiveData<Static>
 
     @Query("SELECT * FROM rapid_static WHERE pk = :country")
-    fun getStaticX(country: String): Static?
-
-    @Query("SELECT responsePk FROM rapid_statics")
-    fun getCountriesLiveData(): LiveData<List<String>>
-
-    @Query("SELECT responsePk FROM rapid_statics")
-    fun getCountries(): List<String>?
+    fun getStaticX(country: String): Flow<Static?>
 
     @Query("SELECT * FROM rapid_statics")
     fun getStaticsX(): List<Datas>
+
+    @Query("SELECT name FROM counties ORDER BY name ASC")
+    fun getCountries(): Flow<List<String>>
 }
