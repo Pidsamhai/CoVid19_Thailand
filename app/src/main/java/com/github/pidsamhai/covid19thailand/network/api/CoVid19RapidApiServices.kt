@@ -13,6 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://covid-193.p.rapidapi.com/"
 
@@ -52,6 +53,9 @@ interface CoVid19RapidApiServices {
                         level = HttpLoggingInterceptor.Level.BODY
                     })
                 }
+                callTimeout(30, TimeUnit.SECONDS)
+                readTimeout(30, TimeUnit.SECONDS)
+                writeTimeout(30, TimeUnit.SECONDS)
             }.build()
 
             return Retrofit.Builder()
