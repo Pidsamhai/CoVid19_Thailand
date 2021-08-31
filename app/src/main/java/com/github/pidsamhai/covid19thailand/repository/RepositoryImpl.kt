@@ -78,7 +78,10 @@ class RepositoryImpl(
         }
     )
 
-    override fun getTodayByProvince(province: String): Flow<Result<TodayByProvince>> =
+    override fun getTodayByProvince(
+        province: String,
+        forceRefresh: Boolean
+    ): Flow<Result<TodayByProvince>> =
         networkBoundResource(
             loadFromDb = {
                 withContext(Dispatchers.IO) {
@@ -92,7 +95,7 @@ class RepositoryImpl(
                     database.todayByProvince.upSert(it)
                 }
             },
-            shouldFetch = { lastFetch.shouldFetchTodayByProvince || it == null },
+            shouldFetch = { (lastFetch.shouldFetchTodayByProvince || it == null) || forceRefresh },
             createCall = {
                 try {
                     ApiResponse.Success(covid19ApiServices.getTodayCaseByProvince()).also {

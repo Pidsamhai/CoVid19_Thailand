@@ -17,6 +17,6 @@ interface Repository {
     fun getTimeLineLiveData(): LiveData<Result<TimeLine>>
     fun getTimeLineDataLiveData(): LiveData<Result<List<Data>>>
     fun clearDataBase()
-    fun getTodayByProvince(province: String): Flow<Result<TodayByProvince>>
+    fun getTodayByProvince(province: String, forceRefresh: Boolean = false): Flow<Result<TodayByProvince>>
     fun getTodayByProvinces(forceRefresh: Boolean = false): Flow<Result<List<TodayByProvince>>>
 }

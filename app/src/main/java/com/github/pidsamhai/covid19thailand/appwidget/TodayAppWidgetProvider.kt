@@ -19,7 +19,9 @@ import com.github.pidsamhai.covid19thailand.utilities.toCurrency
 import com.github.pidsamhai.covid19thailand.utilities.toLastUpdate
 import com.github.pidsamhai.covid19thailand.utilities.updateTime
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.last
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
@@ -30,7 +32,8 @@ class TodayAppWidgetProvider : AppWidgetProvider(), KoinComponent {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val pref: SharedPreferences by inject(named("widgetPref"))
-    val repository: Repository by inject()
+    private val repository: Repository by inject()
+    private var job: Job? = null
 
     override fun onReceive(context: Context, intent: Intent?) {
         super.onReceive(context, intent)
@@ -60,22 +63,24 @@ class TodayAppWidgetProvider : AppWidgetProvider(), KoinComponent {
         appWidgetManager: AppWidgetManager?,
         appWidgetIds: IntArray?
     ) {
-
-        scope.launch {
+        job = scope.launch {
             appWidgetIds?.forEach { appWidgetId ->
-                repository.getTodayByProvince(getProvince(appWidgetId) ?: return@launch).first()
-                    .also { result ->
-                        when (result) {
-                            is Result.Success -> {
-                                updateWidget(
-                                    context,
-                                    appWidgetManager,
-                                    appWidgetId,
-                                    result.data
-                                )
-                            }
+                repository.getTodayByProvince(
+                    getProvince(appWidgetId) ?: return@launch
+                ).collectLatest { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            updateWidget(
+                                context,
+                                appWidgetManager,
+                                appWidgetId,
+                                result.data
+                            )
+                            job?.cancel()
+                            job = null
                         }
                     }
+                }
             }
         }
     }
