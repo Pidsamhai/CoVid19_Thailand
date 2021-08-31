@@ -46,11 +46,11 @@ inline fun <ResultType: Any, RequestType: Any> networkBoundResource(
                     if (data != null) {
                         emit(Result.Success(data))
                     } else {
-                        emit(Result.Fail)
+                        emit(Result.Fail(Exception("Data is Empty")))
                     }
                 }
 
-                is ApiResponse.Error -> emit(Result.Fail)
+                is ApiResponse.Error -> emit(Result.Fail(res.data))
             }
         }
     }
@@ -70,14 +70,14 @@ inline fun <ResultType: Any, RequestType : Any> networkBoundResource(
 
         try {
             saveFetchResult(fetch())
-            query().map { it?.let{ Result.Success(it) } ?: Result.Fail }
+            query().map { it?.let{ Result.Success(it) } ?: Result.Fail(Exception("Data is Empty")) }
         } catch (e: Exception) {
             Timber.e(e)
             onFetchFailed(e)
-            query().map { Result.Fail }
+            query().map { Result.Fail(e) }
         }
     } else {
-        data.map { it?.let{ Result.Success(it)} ?: Result.Fail }
+        data.map { it?.let{ Result.Success(it)} ?: Result.Fail(Exception("Data is Empty")) }
     }
 
     emitAll(flow)

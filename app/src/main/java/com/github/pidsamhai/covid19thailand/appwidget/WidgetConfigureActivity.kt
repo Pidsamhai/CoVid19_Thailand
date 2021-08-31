@@ -74,7 +74,7 @@ class WidgetConfigureActivity : AppCompatActivity() {
         lifecycleScope.launchWhenResumed {
             vm.todayProvinceResource.collectLatest {
                 when (it) {
-                    Result.Fail -> {}
+                    is Result.Fail -> {}
                     Result.Loading -> {}
                     is Result.Success -> {
                         it.data.forEach { m ->

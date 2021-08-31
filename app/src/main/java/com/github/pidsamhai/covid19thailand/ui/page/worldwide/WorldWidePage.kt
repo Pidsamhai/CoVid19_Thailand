@@ -1,5 +1,6 @@
 package com.github.pidsamhai.covid19thailand.ui.page.worldwide
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -14,6 +15,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.pidsamhai.covid19thailand.db.Result
@@ -33,11 +35,12 @@ fun WorldWidePage(
     viewModel: WorldWideModel = getStateViewModel(),
     subtitleCallback: SubtitleCallback = { }
 ) {
+    val context = LocalContext.current
     val countriesResult by viewModel.countries.collectAsState(initial = Result.Initial)
     val staticResult by viewModel.static.observeAsState(initial = Result.Initial)
 
     var showState by remember { mutableStateOf(false) }
-    var selectedCountry by rememberSaveable{ mutableStateOf("Please Select area...") }
+    var selectedCountry by rememberSaveable { mutableStateOf("Please Select area...") }
     var countries by remember { mutableStateOf(listOf<String>()) }
     var static by remember { mutableStateOf<Static?>(null) }
     val isLoading = countriesResult is Result.Loading || staticResult is Result.Loading
@@ -50,12 +53,26 @@ fun WorldWidePage(
 
     when (countriesResult) {
         is Result.Success -> countries = (countriesResult as Result.Success<List<String>>).data
+        is Result.Fail -> {
+            Toast.makeText(
+                context,
+                (countriesResult as Result.Fail).exception.message,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     when (staticResult) {
         is Result.Success -> {
             static = (staticResult as Result.Success<Static>).data
             subtitleCallback(static?.datas?.firstOrNull()?.time)
+        }
+        is Result.Fail -> {
+            Toast.makeText(
+                context,
+                (countriesResult as Result.Fail).exception.message,
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
