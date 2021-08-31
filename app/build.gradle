@@ -88,6 +88,9 @@ android {
 //            arg("room.expandProjection", "true")
         }
     }
+    lintOptions {
+        checkReleaseBuilds false
+    }
 }
 
 dependencies {
