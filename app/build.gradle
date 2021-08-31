@@ -21,12 +21,12 @@ android {
         codeFormat = "MNNPPPRR"
     }
 
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.github.pidsamhai.covid19thailand"
         minSdkVersion 22
-        targetSdkVersion 30
+        targetSdkVersion 31
         if (androidGitVersion.code() == 0) {
             versionCode 1
         } else  {
