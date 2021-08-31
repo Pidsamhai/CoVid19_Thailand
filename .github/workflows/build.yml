@@ -91,3 +91,9 @@ jobs:
             checksum.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifact Debug Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: app/build/outputs/apk/debug/app-debug.apk
