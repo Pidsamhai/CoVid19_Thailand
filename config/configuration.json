@@ -27,6 +27,10 @@
     {
       "title": "## \uD83E\uDD16 CI",
       "labels": ["[ci]"]
+    },
+    {
+      "title": "## \uD83D\uDDD1️ Remove",
+      "labels": ["[removed]"]
     }
   ],
   "ignore_labels": [
