@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.github.pidsamhai.covid19thailand.R
 import com.github.pidsamhai.covid19thailand.ui.page.update.UpdateDialog
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.AboutPageVM
@@ -105,6 +106,10 @@ private fun AboutPageContent(
                 )
                 Text(text = stringResource(id = R.string.clean_cache).uppercase())
             }
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            Text(text = "v ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
         }
     }
 }
