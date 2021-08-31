@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
+      - name: Check Dev
+        run: |
+          echo REF ${{ github.ref }}
+          echo IS PRERELEASE ${{ contains(github.ref, 'dev') }}
       - uses: actions/checkout@v2
         with:
           submodules: true
@@ -84,7 +88,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          prerelease: contains(github.ref, 'dev')
+          prerelease: "!contains(github.ref, 'dev')"
           body: "${{steps.github_release.outputs.changelog}}"
           files: |
             app/build/outputs/apk/release/app-release.apk
