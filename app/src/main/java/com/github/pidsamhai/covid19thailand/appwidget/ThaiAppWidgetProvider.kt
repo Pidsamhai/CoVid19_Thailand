@@ -3,6 +3,7 @@ package com.github.pidsamhai.covid19thailand.appwidget
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.view.View
 import android.widget.RemoteViews
 import com.github.pidsamhai.covid19thailand.R
 import com.github.pidsamhai.covid19thailand.db.Result
@@ -47,17 +48,26 @@ class ThaiAppWidgetProvider : BaseAppWidgetProvider<TodayByProvince, String>() {
             appWidgetId: Int,
             data: TodayByProvince
         ) {
+            val layout = if (data.province != ThaiWidgetConfigureActivity.SELECT_DEFAULT) R.layout.app_widget_2_col
+            else R.layout.app_widget_4_col
             val view: RemoteViews = RemoteViews(
                 context?.packageName,
-                R.layout.today_app_widget
+                layout
             ).apply {
                 setTextViewText(R.id.province, data.province)
-                setTextViewText(R.id.newCase, data.newCase.toCurrency())
                 setTextViewText(R.id.latest_fetch, updateTime())
+                setTextViewText(R.id.newCase, data.newCase.toCurrency())
                 setTextViewText(
                     R.id.totalCase,
-                    data.totalCase.toCurrency()
+                    data.totalCase.toCurrency(APPWIDGET_TOTAL_TEMPLATE)
                 )
+
+                setTextViewText(R.id.newDeath, data.totalDeath.toCurrency())
+                setTextViewText(
+                    R.id.totalDeath,
+                    data.totalDeath.toCurrency(APPWIDGET_TOTAL_TEMPLATE)
+                )
+
                 setTextViewText(
                     R.id.latest_update,
                     data.updateDate.toLastUpdate(APPWIDGET_LAST_UPDATE_TEMPLATE)
@@ -68,7 +78,7 @@ class ThaiAppWidgetProvider : BaseAppWidgetProvider<TodayByProvince, String>() {
                 )
                 setOnClickPendingIntent(
                     R.id.btn_setting,
-                    openWidgetConfigure(appWidgetId, context, ThaiAppWidgetProvider::class.java)
+                    openWidgetConfigure(appWidgetId, context, ThaiWidgetConfigureActivity::class.java)
                 )
             }
             appWidgetManager?.updateAppWidget(appWidgetId, view)

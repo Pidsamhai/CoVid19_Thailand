@@ -1,0 +1,408 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 7,
+    "identityHash": "c4f9b384750485f0d06a2ea67f66d154",
+    "entities": [
+      {
+        "tableName": "today",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`newCase` INTEGER, `newCaseExcludeAbroad` INTEGER, `totalCase` INTEGER, `totalCaseExcludeAbroad` INTEGER, `txnDate` TEXT, `updateDate` TEXT NOT NULL, PRIMARY KEY(`updateDate`))",
+        "fields": [
+          {
+            "fieldPath": "newCase",
+            "columnName": "newCase",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "newCaseExcludeAbroad",
+            "columnName": "newCaseExcludeAbroad",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalCase",
+            "columnName": "totalCase",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalCaseExcludeAbroad",
+            "columnName": "totalCaseExcludeAbroad",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "txnDate",
+            "columnName": "txnDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "updateDate",
+            "columnName": "updateDate",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "updateDate"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "timeline",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`devBy` TEXT, `severBy` TEXT, `source` TEXT, `updateDate` TEXT NOT NULL, PRIMARY KEY(`updateDate`))",
+        "fields": [
+          {
+            "fieldPath": "devBy",
+            "columnName": "devBy",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "severBy",
+            "columnName": "severBy",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "updateDate",
+            "columnName": "updateDate",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "updateDate"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "timeline_data",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`confirmed` INTEGER, `date` TEXT NOT NULL, `deaths` INTEGER, `hospitalized` INTEGER, `newConfirmed` INTEGER, `newDeaths` INTEGER, `newHospitalized` INTEGER, `newRecovered` INTEGER, `recovered` INTEGER, PRIMARY KEY(`date`))",
+        "fields": [
+          {
+            "fieldPath": "confirmed",
+            "columnName": "confirmed",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deaths",
+            "columnName": "deaths",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hospitalized",
+            "columnName": "hospitalized",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "newConfirmed",
+            "columnName": "newConfirmed",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "newDeaths",
+            "columnName": "newDeaths",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "newHospitalized",
+            "columnName": "newHospitalized",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "newRecovered",
+            "columnName": "newRecovered",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "recovered",
+            "columnName": "recovered",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "date"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "rapid_static",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`parameters` TEXT, `datas` TEXT, `results` INTEGER, `pk` TEXT NOT NULL, PRIMARY KEY(`pk`))",
+        "fields": [
+          {
+            "fieldPath": "parameters",
+            "columnName": "parameters",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "datas",
+            "columnName": "datas",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "results",
+            "columnName": "results",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pk",
+            "columnName": "pk",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "pk"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "rapid_statics",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cases` TEXT, `country` TEXT NOT NULL, `day` TEXT, `deaths` TEXT, `tests` TEXT, `time` TEXT, `responsePk` TEXT NOT NULL, PRIMARY KEY(`responsePk`))",
+        "fields": [
+          {
+            "fieldPath": "cases",
+            "columnName": "cases",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "day",
+            "columnName": "day",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deaths",
+            "columnName": "deaths",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tests",
+            "columnName": "tests",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "responsePk",
+            "columnName": "responsePk",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "responsePk"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "rapid_history",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cases` TEXT, `country` TEXT, `day` TEXT, `deaths` TEXT, `tests` TEXT, `time` TEXT, `historyPk` TEXT NOT NULL, PRIMARY KEY(`historyPk`))",
+        "fields": [
+          {
+            "fieldPath": "cases",
+            "columnName": "cases",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "day",
+            "columnName": "day",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deaths",
+            "columnName": "deaths",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tests",
+            "columnName": "tests",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "historyPk",
+            "columnName": "historyPk",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "historyPk"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "today_by_province",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`province` TEXT NOT NULL, `newCase` INTEGER, `newCaseExcludeAbroad` INTEGER, `totalCase` INTEGER, `totalCaseExcludeAbroad` INTEGER, `txnDate` TEXT, `updateDate` TEXT, `new_death` INTEGER, `total_death` INTEGER, PRIMARY KEY(`province`))",
+        "fields": [
+          {
+            "fieldPath": "province",
+            "columnName": "province",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "newCase",
+            "columnName": "newCase",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "newCaseExcludeAbroad",
+            "columnName": "newCaseExcludeAbroad",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalCase",
+            "columnName": "totalCase",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalCaseExcludeAbroad",
+            "columnName": "totalCaseExcludeAbroad",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "txnDate",
+            "columnName": "txnDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "updateDate",
+            "columnName": "updateDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "newDeath",
+            "columnName": "new_death",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalDeath",
+            "columnName": "total_death",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "province"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "counties",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, PRIMARY KEY(`name`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "name"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c4f9b384750485f0d06a2ea67f66d154')"
+    ]
+  }
+}

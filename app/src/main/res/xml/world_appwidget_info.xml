@@ -6,5 +6,5 @@
     android:configure="com.github.pidsamhai.covid19thailand.appwidget.WorldWidgetConfigureActivity"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
-    android:previewImage="@layout/today_app_widget">
+    android:previewImage="@layout/app_widget_4_col">
 </appwidget-provider>

@@ -3,6 +3,7 @@ package com.github.pidsamhai.covid19thailand.utilities
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
@@ -22,12 +23,12 @@ fun ddcDateReformat(string: String): String {
     return "${date.first()}T${date.last()}"
 }
 
-const val DEFAULT_LAST_UPDATE_TEMPLATE = "( อัพเดทล่าสุด %s )"
+const val DEFAULT_LAST_UPDATE_TEMPLATE = "( อัพเดทล่าสุด %s/%s/%s %s:%s:%s )"
 
 fun String?.toLastUpdate(template: String = DEFAULT_LAST_UPDATE_TEMPLATE): String? {
-    var datetime: String? = null
+    var datetime: LocalDateTime? = null
     if (this != null) {
-        val parserDate = if (this.matches(DDC_DATE_PATTERN)) {
+        datetime = if (this.matches(DDC_DATE_PATTERN)) {
             ddcDateReformat(this).toLocalDateTime()
         } else {
             /**
@@ -37,10 +38,15 @@ fun String?.toLastUpdate(template: String = DEFAULT_LAST_UPDATE_TEMPLATE): Strin
              */
             this.split("+")[0].toLocalDateTime()
         }
-        datetime = "${parserDate.dayOfMonth}/${parserDate.monthNumber}/${parserDate.year} " +
-                "${parserDate.hour}:${parserDate.minute}"
     }
-    return if (datetime != null) template.format(datetime) else datetime
+    return if (datetime != null) template.format(
+        datetime.dayOfMonth,
+        datetime.monthNumber,
+        datetime.year,
+        datetime.hour,
+        datetime.minute,
+        datetime.second
+    ) else datetime
 }
 
 fun updateTime(): String {

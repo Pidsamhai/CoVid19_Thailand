@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="4dp"
+    android:background="@drawable/widget_bg"
+    android:orientation="vertical"
+    tools:layout_height="wrap_content"
+    tools:layout_width="250dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/province"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ibm_plex"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="14dp"
+            tools:ignore="SpUsage"
+            tools:text="Phetchabun" />
+
+        <TextView
+            android:id="@+id/latest_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_toStartOf="@+id/btn_setting"
+            android:fontFamily="@font/ibm_plex"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/hint"
+            android:textSize="14dp"
+            tools:ignore="SpUsage"
+            tools:text="latest update" />
+
+        <ImageView
+            android:id="@+id/btn_setting"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_round_settings_24" />
+    </RelativeLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:columnCount="2"
+        android:rowCount="1"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:id="@+id/col3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ibm_plex"
+                android:text="ผู้ป่วยรายใหม่"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="#FF0000"
+                android:textSize="13dp"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:id="@+id/newCase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/ibm_plex"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="#FF0000"
+                android:textSize="30dp"
+                tools:ignore="SpUsage"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/totalCase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ibm_plex_sans_thai_looped_semi_bold"
+                android:textColor="#B30000"
+                android:textSize="14dp"
+                tools:ignore="SpUsage"
+                tools:text="1" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/col1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill_horizontal"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ibm_plex"
+                android:text="ผู้เสียชีวิตรายใหม่"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@color/deaths"
+                android:textSize="13dp"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:id="@+id/newDeath"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/ibm_plex"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@color/deaths"
+                android:textSize="30dp"
+                tools:ignore="SpUsage"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/totalDeath"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ibm_plex_sans_thai_looped_semi_bold"
+                android:textColor="@color/deaths"
+                android:textSize="14dp"
+                tools:ignore="SpUsage"
+                tools:text="1" />
+
+        </LinearLayout>
+
+    </GridLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/latest_fetch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ibm_plex_sans_thai_looped_semi_bold"
+            android:gravity="center_vertical"
+            android:textColor="@color/hint"
+            android:textSize="14dp"
+            tools:ignore="SpUsage"
+            tools:text="latest fetch" />
+
+        <ImageView
+            android:id="@+id/btn_refresh"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_round_refresh_24" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -2,8 +2,6 @@ package com.github.pidsamhai.covid19thailand.db
 
 import android.content.Context
 import androidx.room.*
-import androidx.room.migration.AutoMigrationSpec
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.github.pidsamhai.covid19thailand.db.dao.RapidDao
 import com.github.pidsamhai.covid19thailand.db.dao.TimeLineDao
 import com.github.pidsamhai.covid19thailand.db.dao.TodayByProvinceDao
@@ -33,8 +31,9 @@ import com.github.pidsamhai.covid19thailand.utilities.DATABASE_NAME
     ],
     autoMigrations = [
         AutoMigration(from = 5, to = 6),
+        AutoMigration(from = 6, to = 7)
     ],
-    version = 6,
+    version = 7,
     exportSchema = true
 )
 @TypeConverters(TypeConverter::class)

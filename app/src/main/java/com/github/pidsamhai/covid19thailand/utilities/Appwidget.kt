@@ -14,7 +14,8 @@ const val APPWIDGET_REFRESH_REQ_CODE = 0
 const val APPWIDGET_SETTING_REQ_CODE = 1
 const val APPWIDGET_REFRESH_ACTION = "refresh"
 const val APPWIDGET_EXTRA_REFRESH = "ex_refresh"
-const val APPWIDGET_LAST_UPDATE_TEMPLATE = "ข้อมูลล่าสุด %s"
+const val APPWIDGET_LAST_UPDATE_TEMPLATE = "%s/%s/%s"
+const val APPWIDGET_TOTAL_TEMPLATE = "สะสม %,d"
 
 @SuppressLint("UnspecifiedImmutableFlag")
 fun refreshPendingIntent(context: Context?, clazz: Class<*>): PendingIntent {

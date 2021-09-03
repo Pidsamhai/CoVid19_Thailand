@@ -1,6 +1,6 @@
 package com.github.pidsamhai.covid19thailand.utilities
 
-fun Int?.toCurrency(): String {
+fun Int?.toCurrency(template: String = "%,d"): String {
     return if (this == null) ""
-    else "%,d".format(this)
+    else template.format(this)
 }

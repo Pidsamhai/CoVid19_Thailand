@@ -31,5 +31,11 @@ data class TodayByProvince(
     val txnDate: String?,
     @ColumnInfo(name = "updateDate")
     @SerializedName("update_date")
-    val updateDate: String?
+    val updateDate: String?,
+    @SerializedName("new_death")
+    @ColumnInfo(name = "new_death")
+    val newDeath: Int?,
+    @SerializedName("total_death")
+    @ColumnInfo(name = "total_death")
+    val totalDeath: Int?,
 )

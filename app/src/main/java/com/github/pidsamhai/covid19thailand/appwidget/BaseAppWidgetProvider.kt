@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.edit
 import com.github.pidsamhai.covid19thailand.db.Result

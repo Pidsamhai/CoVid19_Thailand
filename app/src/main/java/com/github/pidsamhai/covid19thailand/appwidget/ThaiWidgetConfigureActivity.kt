@@ -63,7 +63,7 @@ class ThaiWidgetConfigureActivity : BaseWidgetConfigureActivity<TodayByProvince,
     }
 
     companion object {
-        private const val SELECT_DEFAULT = "ทั้งประเทศ"
+        const val SELECT_DEFAULT = "ทั้งประเทศ"
     }
 }
 
