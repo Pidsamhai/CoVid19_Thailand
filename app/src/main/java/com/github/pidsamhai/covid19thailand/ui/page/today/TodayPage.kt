@@ -21,11 +21,10 @@ import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.response.ddc.Today
 import com.github.pidsamhai.covid19thailand.ui.callback.SubtitleCallback
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.ToDayViewModel
+import com.github.pidsamhai.covid19thailand.ui.widget.CardItemDefault
 import com.github.pidsamhai.covid19thailand.ui.widget.ReportWidget
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import org.koin.androidx.compose.get
 import org.koin.androidx.compose.getStateViewModel
 
 @Composable
@@ -85,22 +84,27 @@ private fun TodayPageContent(
             ) {
                 Text(
                     text = notification,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    style = MaterialTheme.typography.body1
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 18.sp,
+                    style = MaterialTheme.typography.body1,
+                    color = Color.White
                 )
             }
         }
-        ReportWidget(
-            confirmed = today?.totalCase,
-            newConfirmed = today?.newCase,
-            recovered = null,
-            newRecovered = null,
-            hospitalized = null,
-            newHospitalized = null,
-            deaths = null,
-            newDeaths = null
-        )
+        today?.let {
+            ReportWidget(
+                confirmed = today.totalCase,
+                newConfirmed = today.newCase,
+                recovered = today.totalRecovered,
+                newRecovered = today.newRecovered,
+                hospitalized = null,
+                newHospitalized = null,
+                deaths = today.totalDeath,
+                newDeaths = today.newDeath,
+                textStyle = CardItemDefault.textStyle.copy(fontSize = 14.sp),
+                newConfirmStyle = CardItemDefault.textStyle.copy(fontSize = 20.sp)
+            )
+        }
     }
 }
 
@@ -116,6 +120,10 @@ private fun TodayPagePreview() {
             newCaseExcludeAbroad = 20,
             totalCase = 150,
             totalCaseExcludeAbroad = 1,
+            newRecovered = 10,
+            totalRecovered = 100,
+            newDeath = 5,
+            totalDeath = 10,
             updateDate = "10/10/2021",
             txnDate = "10/10/2021"
         )

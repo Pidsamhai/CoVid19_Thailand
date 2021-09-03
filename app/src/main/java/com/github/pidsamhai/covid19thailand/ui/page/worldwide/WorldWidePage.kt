@@ -18,11 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
 import com.github.pidsamhai.covid19thailand.ui.callback.SubtitleCallback
 import com.github.pidsamhai.covid19thailand.ui.dialog.SelectCountryDialog
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.WorldWideModel
+import com.github.pidsamhai.covid19thailand.ui.widget.CardItemDefault
 import com.github.pidsamhai.covid19thailand.ui.widget.ReportWidget
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -120,7 +122,9 @@ fun WorldWidePage(
                     hospitalized = it.cases?.active,
                     newHospitalized = null,
                     deaths = it.deaths?.total,
-                    newDeaths = it.deaths?.new?.toIntOrNull()
+                    newDeaths = it.deaths?.new?.toIntOrNull(),
+                    textStyle = CardItemDefault.textStyle.copy(fontSize = 10.sp),
+                    newConfirmStyle = CardItemDefault.textStyle.copy(fontSize = 20.sp),
                 )
             }
         }

@@ -2,6 +2,8 @@ package com.github.pidsamhai.covid19thailand.utilities
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.github.pidsamhai.covid19thailand.R
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -71,3 +73,6 @@ object Keys {
 
 val chartLabelColor: String
     @Composable get() = if (isSystemInDarkTheme()) "#ffffff" else "#000000"
+
+val TOTAL_LABEL_FORMAT: String
+ @Composable get() = stringResource(id = R.string.label_total)

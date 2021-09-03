@@ -31,9 +31,10 @@ import com.github.pidsamhai.covid19thailand.utilities.DATABASE_NAME
     ],
     autoMigrations = [
         AutoMigration(from = 5, to = 6),
-        AutoMigration(from = 6, to = 7)
+        AutoMigration(from = 6, to = 7),
+        AutoMigration(from = 7, to = 8),
     ],
-    version = 7,
+    version = 8,
     exportSchema = true
 )
 @TypeConverters(TypeConverter::class)

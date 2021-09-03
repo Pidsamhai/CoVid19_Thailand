@@ -15,6 +15,7 @@ val IBMPlexLooped = FontFamily(
         Font(R.font.ibm_plex_sans_thai_looped_bold, FontWeight.Bold, FontStyle.Italic),
         Font(R.font.ibm_plex_sans_thai_looped_medium, FontWeight.Normal, FontStyle.Italic),
         Font(R.font.ibm_plex_sans_thai_looped_regular, FontWeight.Normal),
+        Font(R.font.ibm_plex_sans_thai_looped_semi_bold, FontWeight.SemiBold),
 )
 
 // Set of Material typography styles to start with

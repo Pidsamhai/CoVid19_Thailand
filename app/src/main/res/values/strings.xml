@@ -11,4 +11,8 @@
     <string name="title_today">Covid 19 Today</string>
     <string name="title_time_line">Covid 19 Time Line</string>
     <string name="title_world">Covid 19 World</string>
+    <string name="label_new_confirm">ผู้ป่วยรายใหม่</string>
+    <string name="label_new_death">ผู้เสียชีวิตรายใหม่</string>
+    <string name="label_new_recovery">ผู้ป่วยรักษาหาย</string>
+    <string name="label_total">สะสม %,d</string>
 </resources>
