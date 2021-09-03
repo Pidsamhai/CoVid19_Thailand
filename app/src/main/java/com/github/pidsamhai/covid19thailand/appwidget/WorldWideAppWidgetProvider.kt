@@ -10,7 +10,6 @@ import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base
 import com.github.pidsamhai.covid19thailand.repository.Repository
 import com.github.pidsamhai.covid19thailand.utilities.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.last
 import org.koin.core.component.inject
 import timber.log.Timber
 
@@ -50,7 +49,7 @@ class WorldWideAppWidgetProvider : BaseAppWidgetProvider<Static, String?>() {
             val static: Datas = data.static ?: return
             val view: RemoteViews = RemoteViews(
                 context?.packageName,
-                R.layout.today_app_widget
+                R.layout.app_widget_3_col
             ).apply {
                 val country = if(static.country.lowercase() == "all") "World" else static.country
                 setTextViewText(R.id.province, country)
@@ -58,12 +57,25 @@ class WorldWideAppWidgetProvider : BaseAppWidgetProvider<Static, String?>() {
                 setTextViewText(R.id.latest_fetch, updateTime())
                 setTextViewText(
                     R.id.totalCase,
-                    static.cases?.total?.toCurrency()
+                    static.cases?.total?.toCurrency(APPWIDGET_TOTAL_TEMPLATE)
                 )
                 setTextViewText(
                     R.id.latest_update,
                     static.time.toLastUpdate(APPWIDGET_LAST_UPDATE_TEMPLATE)
                 )
+
+                setTextViewText(R.id.newDeath, static.deaths?.new?.toInt().toCurrency())
+                setTextViewText(
+                    R.id.totalDeath,
+                    static.deaths?.total.toCurrency(APPWIDGET_TOTAL_TEMPLATE)
+                )
+
+                setTextViewText(R.id.newRecovery, static.cases?.recovered.toCurrency())
+                setTextViewText(
+                    R.id.totalDeath,
+                    static.deaths?.total.toCurrency(APPWIDGET_TOTAL_TEMPLATE)
+                )
+
                 setOnClickPendingIntent(
                     R.id.btn_refresh,
                     refreshPendingIntent(
