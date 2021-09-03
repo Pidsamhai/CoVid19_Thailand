@@ -48,7 +48,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <receiver android:name=".appwidget.ThaiAppWidgetProvider" android:exported="true" android:label="Province">
+        <receiver android:name=".appwidget.ThaiAppWidgetProvider" android:exported="true" android:label="Thai">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
