@@ -67,7 +67,7 @@ class TodayAppWidgetProvider : AppWidgetProvider(), KoinComponent {
             appWidgetIds?.forEach { appWidgetId ->
                 repository.getTodayByProvince(
                     getProvince(appWidgetId) ?: return@launch
-                ).collectLatest { result ->
+                ).last().also { result ->
                     when (result) {
                         is Result.Success -> {
                             updateWidget(
