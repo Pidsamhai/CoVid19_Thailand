@@ -33,6 +33,11 @@
             android:exported="true"
             android:theme="@style/Theme.AppCompat"/>
 
+        <activity
+            android:name=".appwidget.WorldWidgetConfigureActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -43,12 +48,20 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <receiver android:name=".appwidget.TodayAppWidgetProvider" android:exported="true">
+        <receiver android:name=".appwidget.TodayAppWidgetProvider" android:exported="true" android:label="Province">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/today_appwidget_info" />
+        </receiver>
+
+        <receiver android:name=".appwidget.WorldWideAppWidgetProvider" android:exported="true" android:label="World">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/world_appwidget_info" />
         </receiver>
 
     </application>

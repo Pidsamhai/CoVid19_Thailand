@@ -16,7 +16,10 @@ data class Static(
     val datas: List<Datas>?,
     @SerializedName("results")
     val results: Int?
-){
+) {
     @PrimaryKey(autoGenerate = false)
-    var pk:String = "static_pk"
+    var pk: String = "static_pk"
+
+    val static: Datas?
+        get() = datas?.firstOrNull()
 }

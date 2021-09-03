@@ -4,7 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.github.pidsamhai.covid19thailand.R
-import com.github.pidsamhai.covid19thailand.appwidget.WidgetConfigureVm
+import com.github.pidsamhai.covid19thailand.appwidget.TodayByProvinceWidgetConfigureVM
+import com.github.pidsamhai.covid19thailand.appwidget.WorldWidgetConfigureVM
 import com.github.pidsamhai.covid19thailand.db.CoVid19Database
 import com.github.pidsamhai.covid19thailand.db.LastFetch
 import com.github.pidsamhai.covid19thailand.db.LastFetchImpl
@@ -14,7 +15,6 @@ import com.github.pidsamhai.covid19thailand.repository.GithubRepositoryImpl
 import com.github.pidsamhai.covid19thailand.repository.Repository
 import com.github.pidsamhai.covid19thailand.repository.RepositoryImpl
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.*
-import com.google.firebase.FirebaseApp
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
@@ -61,7 +61,8 @@ val viewModelModule = module {
     viewModel { UpdateDialogVM(get(), get()) }
     viewModel { DownloadDialogVM(get(), get(), get()) }
     viewModel { AboutPageVM(get()) }
-    viewModel { WidgetConfigureVm(get(), get(named("widgetPref"))) }
+    viewModel { TodayByProvinceWidgetConfigureVM(get(), get(named("widgetPref"))) }
+    viewModel { WorldWidgetConfigureVM(get(), get(named("widgetPref"))) }
 }
 
 val appModule = module {

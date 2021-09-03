@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.lifecycle.lifecycleScope
 import com.github.pidsamhai.covid19thailand.R
@@ -16,91 +15,46 @@ import com.github.pidsamhai.covid19thailand.network.response.ddc.TodayByProvince
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WidgetConfigureActivity : AppCompatActivity() {
-    private val vm: WidgetConfigureVm by viewModel()
-    private val adapter: ArrayAdapter<String> by lazy {
-        ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, mutableListOf("FUCK"))
-    }
-    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+class WidgetConfigureActivity : BaseWidgetConfigureActivity<TodayByProvince, String>() {
+    private val vm: TodayByProvinceWidgetConfigureVM by viewModel()
     private val listProvince: MutableMap<String, TodayByProvince> = mutableMapOf()
-    private var listItem: MutableList<String> = mutableListOf()
-    private var selectedProvince: String = SELECT_DEFAULT
+    override var listItem: MutableList<String> = mutableListOf()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.widget_config)
-
-        supportActionBar?.title = "Create widget"
-
-        setResult(RESULT_CANCELED)
-        val btnCreate = findViewById<Button>(R.id.btn_create)
-        val spinner = findViewById<AppCompatSpinner>(R.id.spinner_province)
-
-        val intent = intent
-        val extras = intent.extras
-        if (extras != null) {
-            appWidgetId = extras.getInt(
-                AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
-            )
-            if (extras.getBoolean(TodayAppWidgetProvider.EXTRA_REFRESH, false)) {
-                btnCreate.text = "Update"
-            }
-        }
-
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish()
-        }
-
-        spinner.adapter = adapter
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedProvince = parent?.selectedItem as String
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-        }
-
-        btnCreate.setOnClickListener {
-            if (selectedProvince != SELECT_DEFAULT) {
-                createWidget(listProvince[selectedProvince] ?: return@setOnClickListener)
-            }
-        }
-
-        lifecycleScope.launchWhenResumed {
-            vm.todayProvinceResource.collectLatest {
-                when (it) {
-                    is Result.Fail -> {}
-                    Result.Loading -> {}
-                    is Result.Success -> {
-                        it.data.forEach { m ->
-                            listProvince[m.province] = m
-                        }
-                        listItem = listProvince.toProvinceItem()
-                        adapter.clear()
-                        adapter.addAll(listItem)
-                        adapter.notifyDataSetChanged()
-                        spinner.setSelection(
-                            listItem.indexOf(vm.getSetting(appWidgetId))
-                        )
+    override suspend fun observeData() {
+        vm.dataSource.collectLatest {
+            when (it) {
+                is Result.Fail -> {}
+                Result.Loading -> {}
+                is Result.Success -> {
+                    it.data.forEach { m ->
+                        listProvince[m.province] = m
                     }
+                    listItem = listProvince.toProvinceItem()
+                    adapter.clear()
+                    adapter.addAll(listItem)
+                    adapter.notifyDataSetChanged()
+                    spinner.setSelection(
+                        listItem.indexOf(vm.getSetting(appWidgetId))
+                    )
                 }
             }
         }
     }
 
-    private fun createWidget(todayByProvince: TodayByProvince) {
-        vm.saveWidgetParams(appWidgetId, todayByProvince.province)
+    override fun onCreateClick() {
+        if (selectedItem != SELECT_DEFAULT) {
+            createWidget(listProvince[selectedItem] ?: return)
+        }
+    }
+
+    override fun createWidget(data: TodayByProvince) {
+        vm.saveWidgetSetting(appWidgetId, data.province)
         val appWidgetManager = AppWidgetManager.getInstance(this)
         TodayAppWidgetProvider.updateWidget(
             this,
             appWidgetManager,
             appWidgetId,
-            todayByProvince
+            data
         )
         val resultValue = Intent()
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)

@@ -54,7 +54,7 @@ class RepositoryImpl(
         fetch = { rapidApiServices.getCountries() }
     )
 
-    override fun getStatic(country: String): LiveData<Result<Static>> = networkBoundResource(
+    override fun getStatic(country: String): Flow<Result<Static>> = networkBoundResource(
         query = { database.rapidDao.getStaticX(country) },
         saveFetchResult = {
             database.rapidDao.upSert(it.apply {
@@ -64,7 +64,7 @@ class RepositoryImpl(
         fetch = {
             rapidApiServices.getStatic(country)
         }
-    ).asLiveData()
+    )
 
     override fun getTodayFlow(): Flow<Result<Today>> = networkBoundResource(
         query = { database.todayDao.hashData() },

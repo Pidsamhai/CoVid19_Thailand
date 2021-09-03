@@ -19,7 +19,7 @@ class WorldWideModel(
     private val query = MutableStateFlow(System.currentTimeMillis())
     val country = MutableLiveData<String?>(null)
     val countries: Flow<Result<List<String>>> = query.flatMapLatest { repository.getCountries() }
-    val static: LiveData<Result<Static>> = country.switchMap { repository.getStatic(it ?: return@switchMap liveData {  }) }
+    val static: LiveData<Result<Static>> = country.switchMap { repository.getStatic(it ?: return@switchMap liveData {  }).asLiveData() }
 
     fun refresh() = refreshKey.postValue(System.currentTimeMillis())
 

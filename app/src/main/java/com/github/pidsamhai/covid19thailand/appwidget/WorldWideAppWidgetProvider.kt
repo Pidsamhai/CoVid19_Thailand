@@ -1,31 +1,29 @@
 package com.github.pidsamhai.covid19thailand.appwidget
 
-import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.widget.RemoteViews
-import android.widget.Toast
 import com.github.pidsamhai.covid19thailand.R
 import com.github.pidsamhai.covid19thailand.db.Result
-import com.github.pidsamhai.covid19thailand.network.response.ddc.TodayByProvince
+import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
+import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.base.Datas
 import com.github.pidsamhai.covid19thailand.repository.Repository
 import com.github.pidsamhai.covid19thailand.utilities.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.last
 import org.koin.core.component.inject
+import timber.log.Timber
 
+class WorldWideAppWidgetProvider : BaseAppWidgetProvider<Static, String?>() {
 
-class TodayAppWidgetProvider : BaseAppWidgetProvider<TodayByProvince, String>() {
-
+    override val providerClass: Class<*> = WorldWideAppWidgetProvider::class.java
     private val repository: Repository by inject()
-    override val providerClass: Class<*> = TodayAppWidgetProvider::class.java
 
     override fun onWidgetUpdate(
         context: Context?,
         appWidgetManager: AppWidgetManager?,
         appWidgetId: Int,
-        data: TodayByProvince
+        data: Static
     ) = updateWidget(
         context = context,
         appWidgetManager = appWidgetManager,
@@ -33,45 +31,49 @@ class TodayAppWidgetProvider : BaseAppWidgetProvider<TodayByProvince, String>() 
         data = data
     )
 
-
-    override fun dataSource(setting: String?): Flow<Result<TodayByProvince>>? {
-        return repository.getTodayByProvince(setting ?: return null)
+    override fun dataSource(setting: String?): Flow<Result<Static>>? {
+        return repository.getStatic(setting ?: return null)
     }
 
     override fun getSetting(appWidgetId: Int): String? {
         return pref.getString(appWidgetId.toString(), null)
     }
 
-    @SuppressLint("UnspecifiedImmutableFlag")
     companion object {
         fun updateWidget(
             context: Context?,
             appWidgetManager: AppWidgetManager?,
             appWidgetId: Int,
-            data: TodayByProvince
+            data: Static
         ) {
+            Timber.d("Static %s", data.static)
+            val static: Datas = data.static ?: return
             val view: RemoteViews = RemoteViews(
                 context?.packageName,
                 R.layout.today_app_widget
             ).apply {
-                setTextViewText(R.id.province, data.province)
-                setTextViewText(R.id.newCase, data.newCase.toCurrency())
+                val country = if(static.country.lowercase() == "all") "World" else static.country
+                setTextViewText(R.id.province, country)
+                setTextViewText(R.id.newCase, static.cases?.new?.toInt().toCurrency())
                 setTextViewText(R.id.latest_fetch, updateTime())
                 setTextViewText(
                     R.id.totalCase,
-                    data.totalCase.toCurrency()
+                    static.cases?.total?.toCurrency()
                 )
                 setTextViewText(
                     R.id.latest_update,
-                    data.updateDate.toLastUpdate(APPWIDGET_LAST_UPDATE_TEMPLATE)
+                    static.time.toLastUpdate(APPWIDGET_LAST_UPDATE_TEMPLATE)
                 )
                 setOnClickPendingIntent(
                     R.id.btn_refresh,
-                    refreshPendingIntent(context, TodayAppWidgetProvider::class.java)
+                    refreshPendingIntent(
+                        context,
+                        WorldWideAppWidgetProvider::class.java
+                    )
                 )
                 setOnClickPendingIntent(
                     R.id.btn_setting,
-                    openWidgetConfigure(appWidgetId, context, TodayAppWidgetProvider::class.java)
+                    openWidgetConfigure(appWidgetId, context, WorldWidgetConfigureActivity::class.java)
                 )
             }
             appWidgetManager?.updateAppWidget(appWidgetId, view)

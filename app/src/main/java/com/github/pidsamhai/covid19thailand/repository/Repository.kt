@@ -13,7 +13,7 @@ interface Repository {
     suspend fun getTimeLine(): ApiResponse<TimeLine>
     fun getTodayFlow(): Flow<Result<Today>>
     fun getCountries(): Flow<Result<List<String>>>
-    fun getStatic(country: String): LiveData<Result<Static>>
+    fun getStatic(country: String): Flow<Result<Static>>
     fun getTimeLineLiveData(): LiveData<Result<TimeLine>>
     fun getTimeLineDataLiveData(): LiveData<Result<List<Data>>>
     fun clearDataBase()
