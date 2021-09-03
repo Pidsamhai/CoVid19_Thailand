@@ -35,7 +35,7 @@ jobs:
         with:
           configuration: "config/configuration.json"
           commitMode: true
-          fromTag: "2.1.2"
+          fromTag: "2.1.3"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
