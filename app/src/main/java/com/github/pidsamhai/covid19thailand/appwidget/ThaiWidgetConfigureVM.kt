@@ -9,7 +9,7 @@ import com.github.pidsamhai.covid19thailand.repository.Repository
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 
-class TodayByProvinceWidgetConfigureVM(
+class ThaiWidgetConfigureVM(
     repository: Repository,
     private val pref: SharedPreferences
 ) : ViewModel() {

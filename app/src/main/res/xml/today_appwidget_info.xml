@@ -3,7 +3,7 @@
     android:minWidth="250dp"
     android:minHeight="100dp"
     android:updatePeriodMillis="180000"
-    android:configure="com.github.pidsamhai.covid19thailand.appwidget.WidgetConfigureActivity"
+    android:configure="com.github.pidsamhai.covid19thailand.appwidget.ThaiWidgetConfigureActivity"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     android:previewImage="@layout/today_app_widget">

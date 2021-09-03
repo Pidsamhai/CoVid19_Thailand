@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.github.pidsamhai.covid19thailand.R
-import com.github.pidsamhai.covid19thailand.appwidget.TodayByProvinceWidgetConfigureVM
+import com.github.pidsamhai.covid19thailand.appwidget.ThaiWidgetConfigureVM
 import com.github.pidsamhai.covid19thailand.appwidget.WorldWidgetConfigureVM
 import com.github.pidsamhai.covid19thailand.db.CoVid19Database
 import com.github.pidsamhai.covid19thailand.db.LastFetch
@@ -61,7 +61,7 @@ val viewModelModule = module {
     viewModel { UpdateDialogVM(get(), get()) }
     viewModel { DownloadDialogVM(get(), get(), get()) }
     viewModel { AboutPageVM(get()) }
-    viewModel { TodayByProvinceWidgetConfigureVM(get(), get(named("widgetPref"))) }
+    viewModel { ThaiWidgetConfigureVM(get(), get(named("widgetPref"))) }
     viewModel { WorldWidgetConfigureVM(get(), get(named("widgetPref"))) }
 }
 

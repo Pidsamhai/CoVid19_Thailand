@@ -2,21 +2,13 @@ package com.github.pidsamhai.covid19thailand.appwidget
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import androidx.appcompat.widget.AppCompatSpinner
-import androidx.lifecycle.lifecycleScope
-import com.github.pidsamhai.covid19thailand.R
 import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.response.ddc.TodayByProvince
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WidgetConfigureActivity : BaseWidgetConfigureActivity<TodayByProvince, String>() {
-    private val vm: TodayByProvinceWidgetConfigureVM by viewModel()
+class ThaiWidgetConfigureActivity : BaseWidgetConfigureActivity<TodayByProvince, String>() {
+    private val vm: ThaiWidgetConfigureVM by viewModel()
     private val listProvince: MutableMap<String, TodayByProvince> = mutableMapOf()
     override var listItem: MutableList<String> = mutableListOf()
 
@@ -50,7 +42,7 @@ class WidgetConfigureActivity : BaseWidgetConfigureActivity<TodayByProvince, Str
     override fun createWidget(data: TodayByProvince) {
         vm.saveWidgetSetting(appWidgetId, data.province)
         val appWidgetManager = AppWidgetManager.getInstance(this)
-        TodayAppWidgetProvider.updateWidget(
+        ThaiAppWidgetProvider.updateWidget(
             this,
             appWidgetManager,
             appWidgetId,

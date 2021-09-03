@@ -2,11 +2,8 @@ package com.github.pidsamhai.covid19thailand.appwidget
 
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.widget.RemoteViews
-import android.widget.Toast
 import com.github.pidsamhai.covid19thailand.R
 import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.response.ddc.TodayByProvince
@@ -16,10 +13,10 @@ import kotlinx.coroutines.flow.Flow
 import org.koin.core.component.inject
 
 
-class TodayAppWidgetProvider : BaseAppWidgetProvider<TodayByProvince, String>() {
+class ThaiAppWidgetProvider : BaseAppWidgetProvider<TodayByProvince, String>() {
 
     private val repository: Repository by inject()
-    override val providerClass: Class<*> = TodayAppWidgetProvider::class.java
+    override val providerClass: Class<*> = ThaiAppWidgetProvider::class.java
 
     override fun onWidgetUpdate(
         context: Context?,
@@ -67,11 +64,11 @@ class TodayAppWidgetProvider : BaseAppWidgetProvider<TodayByProvince, String>() 
                 )
                 setOnClickPendingIntent(
                     R.id.btn_refresh,
-                    refreshPendingIntent(context, TodayAppWidgetProvider::class.java)
+                    refreshPendingIntent(context, ThaiAppWidgetProvider::class.java)
                 )
                 setOnClickPendingIntent(
                     R.id.btn_setting,
-                    openWidgetConfigure(appWidgetId, context, TodayAppWidgetProvider::class.java)
+                    openWidgetConfigure(appWidgetId, context, ThaiAppWidgetProvider::class.java)
                 )
             }
             appWidgetManager?.updateAppWidget(appWidgetId, view)
