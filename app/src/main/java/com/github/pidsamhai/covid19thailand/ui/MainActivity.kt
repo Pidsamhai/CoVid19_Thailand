@@ -4,10 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.BottomAppBar
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -64,7 +61,7 @@ private fun BodyContent() {
         },
         bottomBar = {
             BottomAppBar(
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colors.background
             ) {
                 routes.forEach {
                     BottomNavigationItem(

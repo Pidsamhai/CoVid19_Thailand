@@ -4,10 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +19,7 @@ fun CustomAppBar(
     subtitle: String? = null
 ) {
     TopAppBar(
-        backgroundColor = Color.White
+        backgroundColor = MaterialTheme.colors.background
     ) {
         Spacer(Modifier.width(12.dp))
         Column {
