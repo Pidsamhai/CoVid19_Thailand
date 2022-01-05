@@ -3,8 +3,8 @@
     android:minWidth="250dp"
     android:minHeight="100dp"
     android:updatePeriodMillis="0"
-    android:configure="com.github.pidsamhai.covid19thailand.appwidget.ThaiWidgetConfigureActivity"
     android:resizeMode="horizontal|vertical"
+    android:configure="com.github.pidsamhai.covid19thailand.appwidget.WorldWidgetConfigureActivity"
     android:widgetCategory="home_screen"
     android:previewImage="@mipmap/widget_preview">
 </appwidget-provider>

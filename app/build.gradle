@@ -116,6 +116,7 @@ dependencies {
 
     implementation "io.insert-koin:koin-android:$Versions.koin"
     implementation "io.insert-koin:koin-androidx-compose:$Versions.koin"
+    implementation "io.insert-koin:koin-androidx-workmanager:$Versions.koin"
 
     implementation "com.jakewharton.timber:timber:$Versions.timber"
 
@@ -156,6 +157,14 @@ dependencies {
     implementation platform("com.google.firebase:firebase-bom:$Versions.firebase_bom")
     implementation 'com.google.firebase:firebase-config-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    /* Glance Widget */
+    implementation 'androidx.glance:glance:1.0.0-alpha01'
+    implementation 'androidx.glance:glance-appwidget:1.0.0-alpha01'
+    implementation 'androidx.glance:glance-appwidget-proto:1.0.0-alpha01'
+
+    /* Work Manager */
+    implementation "androidx.work:work-runtime-ktx:$Versions.work_manager"
 
     /**
      * Fix JDK 11 Compile Error

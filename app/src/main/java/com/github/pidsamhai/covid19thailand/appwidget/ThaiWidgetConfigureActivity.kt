@@ -2,6 +2,8 @@ package com.github.pidsamhai.covid19thailand.appwidget
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.lifecycle.lifecycleScope
 import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.response.ddc.TodayByProvince
 import kotlinx.coroutines.flow.collectLatest
@@ -26,8 +28,9 @@ class ThaiWidgetConfigureActivity : BaseWidgetConfigureActivity<TodayByProvince,
                     adapter.addAll(listItem)
                     adapter.notifyDataSetChanged()
                     spinner.setSelection(
-                        listItem.indexOf(vm.getSetting(appWidgetId))
+                        listItem.indexOf(vm.getConfig(appWidgetId)?.location)
                     )
+                    hideLoading()
                 }
             }
         }
@@ -36,22 +39,63 @@ class ThaiWidgetConfigureActivity : BaseWidgetConfigureActivity<TodayByProvince,
     override fun onCreateClick() {
         if (selectedItem != SELECT_DEFAULT) {
             createWidget(listProvince[selectedItem] ?: return)
+        } else {
+            createTodayWidget()
+        }
+    }
+
+    private fun createTodayWidget() {
+        val config = WidgetConfig(location = "all", type = "thai")
+        vm.saveWidgetSetting(appWidgetId, config)
+        val appWidgetManager = GlanceAppWidgetManager(this)
+        lifecycleScope.launchWhenCreated {
+            val glanceId = appWidgetManager.getGlanceIds(ThaiAppWidget::class.java)
+                .find { it.toString().contains("$appWidgetId") }
+            if (glanceId == null) {
+                finish()
+            }
+
+            vm.todayDataSource.collectLatest {
+                when (it) {
+                    is Result.Fail -> hideLoading()
+                    Result.Initial -> Unit
+                    Result.Loading -> showLoading()
+                    is Result.Success -> {
+                        ThaiAppWidget(today = it.data).update(
+                            this@ThaiWidgetConfigureActivity,
+                            glanceId!!
+                        )
+                        val resultValue = Intent()
+                        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                        setResult(RESULT_OK, resultValue)
+                        finish()
+                    }
+                }
+            }
         }
     }
 
     override fun createWidget(data: TodayByProvince) {
-        vm.saveWidgetSetting(appWidgetId, data.province)
-        val appWidgetManager = AppWidgetManager.getInstance(this)
-        ThaiAppWidgetProvider.updateWidget(
-            this,
-            appWidgetManager,
-            appWidgetId,
-            data
-        )
-        val resultValue = Intent()
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        setResult(RESULT_OK, resultValue)
-        finish()
+        val config = WidgetConfig(location = data.province, type = "thai")
+        vm.saveWidgetSetting(appWidgetId, config)
+
+        vm.saveWidgetSetting(appWidgetId, config)
+        val appWidgetManager = GlanceAppWidgetManager(this)
+        lifecycleScope.launchWhenCreated {
+            val glanceId = appWidgetManager.getGlanceIds(ThaiAppWidget::class.java)
+                .find { it.toString().contains("$appWidgetId") }
+            if (glanceId == null) {
+                finish()
+            }
+            ThaiAppWidget(data).update(
+                this@ThaiWidgetConfigureActivity,
+                glanceId!!
+            )
+            val resultValue = Intent()
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            setResult(RESULT_OK, resultValue)
+            finish()
+        }
     }
 
     private fun MutableMap<String, TodayByProvince>.toProvinceItem(): MutableList<String> {

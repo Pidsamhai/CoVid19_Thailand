@@ -48,7 +48,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <receiver android:name=".appwidget.ThaiAppWidgetProvider" android:exported="true" android:label="Thai">
+        <receiver android:name=".appwidget.ThaiGlanceAppwidgetProvider" android:exported="true" android:label="Thai Province">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -56,12 +56,12 @@
                 android:resource="@xml/today_appwidget_info" />
         </receiver>
 
-        <receiver android:name=".appwidget.WorldWideAppWidgetProvider" android:exported="true" android:label="World">
+        <receiver android:name=".appwidget.WorldGlanceAppwidgetProvider" android:exported="true" android:label="World">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/world_appwidget_info" />
+                android:resource="@xml/glance_appwidget_info" />
         </receiver>
 
     </application>

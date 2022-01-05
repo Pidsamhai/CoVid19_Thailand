@@ -79,3 +79,7 @@ val appModule = module {
 
     single { provideRemoteConfig() }
 }
+
+val workerModule = module {
+
+}
