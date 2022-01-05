@@ -106,7 +106,9 @@ private fun ContentWidget(
                     })
             )
             .fillMaxSize()
-            .background(color = Color.White)
+            .background(
+                imageProvider = ImageProvider(R.drawable.widget_bg)
+            )
             .padding(16.dp)
     ) {
         Row(
@@ -114,12 +116,28 @@ private fun ContentWidget(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = prefix, style = TextStyle(fontWeight = FontWeight.Bold))
-            Text(text = title ?: "")
+            Text(
+                text = prefix,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = ColorProvider(R.color.widget_text)
+                )
+            )
+            Text(
+                text = title ?: "",
+                style = TextStyle(
+                    color = ColorProvider(R.color.widget_text)
+                )
+            )
             Spacer(
                 modifier = GlanceModifier.defaultWeight()
             )
-            Text(text = updateDate.toLastUpdate(APPWIDGET_LAST_UPDATE_TEMPLATE) ?: "")
+            Text(
+                text = updateDate.toLastUpdate(APPWIDGET_LAST_UPDATE_TEMPLATE) ?: "",
+                style = TextStyle(
+                    color = ColorProvider(R.color.widget_text)
+                )
+            )
             Spacer(
                 modifier = GlanceModifier.width(8.dp)
             )
@@ -177,7 +195,7 @@ private fun ContentWidget(
                 Text(
                     text = context.getString(R.string.label_new_death),
                     style = TextStyle(
-                        color = ColorProvider(R.color.deaths),
+                        color = ColorProvider(R.color.widget_text_death),
                         fontWeight = FontWeight.Bold
                     )
                 )
@@ -185,7 +203,7 @@ private fun ContentWidget(
                 Text(
                     text = newDeath.toCurrency(),
                     style = TextStyle(
-                        color = ColorProvider(R.color.deaths),
+                        color = ColorProvider(R.color.widget_text_death),
                         fontWeight = FontWeight.Bold
                     )
                 )
@@ -194,7 +212,7 @@ private fun ContentWidget(
                     text = totalDeath.toCurrency(APPWIDGET_TOTAL_TEMPLATE),
                     style = TextStyle(
                         fontSize = 12.sp,
-                        color = ColorProvider(R.color.deaths),
+                        color = ColorProvider(R.color.widget_text_death),
                         fontWeight = FontWeight.Bold
                     )
                 )
@@ -204,7 +222,10 @@ private fun ContentWidget(
         Row(
             modifier = GlanceModifier.fillMaxWidth()
         ) {
-            Text(text = updateTime())
+            Text(
+                text = updateTime(),
+                style = TextStyle(color = ColorProvider(R.color.widget_text))
+            )
             Spacer(modifier = GlanceModifier.defaultWeight())
             Image(
                 modifier = GlanceModifier.clickable(manualUpdateAction),
