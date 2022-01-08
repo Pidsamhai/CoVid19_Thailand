@@ -34,7 +34,7 @@ class CoVid19Application : Application(){
             })
         }
 
-        val task = PeriodicWorkRequestBuilder<WidgetUpdateWorker>(15, TimeUnit.MINUTES)
+        val task = PeriodicWorkRequestBuilder<WidgetUpdateWorker>(1, TimeUnit.HOURS)
             .build()
 
         with(WorkManager.getInstance(applicationContext)) {
