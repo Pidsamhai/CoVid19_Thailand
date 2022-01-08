@@ -65,4 +65,8 @@ class WidgetUpdateWorker(
             Result.failure()
         }
     }
+
+    companion object {
+        const val NAME = "UPDATE_WORLD_WIDGET"
+    }
 }

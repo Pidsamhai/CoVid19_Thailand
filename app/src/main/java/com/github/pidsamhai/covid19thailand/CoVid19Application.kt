@@ -38,7 +38,7 @@ class CoVid19Application : Application(){
             .build()
 
         with(WorkManager.getInstance(applicationContext)) {
-            enqueueUniquePeriodicWork("UPDATE_WORLD_WIDGET", ExistingPeriodicWorkPolicy.REPLACE, task)
+            enqueueUniquePeriodicWork(WidgetUpdateWorker.NAME, ExistingPeriodicWorkPolicy.KEEP, task)
         }
     }
 }
