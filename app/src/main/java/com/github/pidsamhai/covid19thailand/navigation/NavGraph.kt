@@ -10,8 +10,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
-import com.github.pidsamhai.covid19thailand.ui.page.about.AboutPage
 import com.github.pidsamhai.covid19thailand.ui.callback.SubtitleCallback
+import com.github.pidsamhai.covid19thailand.ui.page.about.AboutPage
 import com.github.pidsamhai.covid19thailand.ui.page.timeline.TimelinePage
 import com.github.pidsamhai.covid19thailand.ui.page.today.TodayPage
 import com.github.pidsamhai.covid19thailand.ui.page.update.DownloadDialogContent

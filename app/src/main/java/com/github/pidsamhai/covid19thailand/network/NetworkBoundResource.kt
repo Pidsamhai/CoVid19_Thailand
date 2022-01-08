@@ -1,10 +1,8 @@
 package com.github.pidsamhai.covid19thailand.network
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import kotlinx.coroutines.delay
 import com.github.pidsamhai.covid19thailand.db.Result
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 

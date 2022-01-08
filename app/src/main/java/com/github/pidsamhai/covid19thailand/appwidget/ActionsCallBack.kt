@@ -10,11 +10,9 @@ import androidx.glance.GlanceId
 import androidx.glance.action.Action
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
-import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
 import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.repository.Repository
-import com.github.pidsamhai.covid19thailand.ui.MainActivity
 import com.github.pidsamhai.covid19thailand.utilities.APPWIDGET_EXTRA_REFRESH
 import com.github.pidsamhai.covid19thailand.utilities.getWidgetConfig
 import com.github.pidsamhai.covid19thailand.utilities.widgetId
@@ -41,24 +39,6 @@ inline fun<reified T: Activity> configureIntent(glanceId: GlanceId, context: Con
 inline fun <reified T: Activity> actionStartConfigureActivity(glanceId: GlanceId, context: Context): Action {
     return actionStartActivity(configureIntent<T>(glanceId, context))
 }
-
-//class ManualUpdateWorldWidgetCallBack : ActionCallback, KoinComponent {
-//    private val pref: SharedPreferences by inject(named("widgetPref"))
-//    private val repository: Repository by inject()
-//    override suspend fun onRun(context: Context, glanceId: GlanceId, parameters: ActionParameters) {
-//        withContext(Dispatchers.Main) {
-//            Toast.makeText(context, "Updating...", Toast.LENGTH_SHORT).show()
-//        }
-//        val config = pref.getWidgetConfig(glanceId.widgetId()!!)!!
-//        Timber.d("GlanceId $glanceId regexId")
-//        repository.getStatic(config.location).collectLatest {
-//            when (it) {
-//                is Result.Success -> WorldAppWidget(it.data).update(context, glanceId)
-//                else -> Unit
-//            }
-//        }
-//    }
-//}
 
 class ManualUpdateWidgetCallBack : ActionCallback, KoinComponent {
     private val pref: SharedPreferences by inject(named("widgetPref"))

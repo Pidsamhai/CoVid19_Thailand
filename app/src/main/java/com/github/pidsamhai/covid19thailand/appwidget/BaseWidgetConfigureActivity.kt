@@ -11,11 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.lifecycle.lifecycleScope
 import com.github.pidsamhai.covid19thailand.R
-import com.github.pidsamhai.covid19thailand.network.response.ddc.TodayByProvince
 import com.github.pidsamhai.covid19thailand.utilities.APPWIDGET_EXTRA_REFRESH
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 abstract class BaseWidgetConfigureActivity<T : Any, S : Any?> : AppCompatActivity() {

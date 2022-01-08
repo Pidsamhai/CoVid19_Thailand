@@ -1,14 +1,10 @@
 package com.github.pidsamhai.covid19thailand.network
 
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import okio.*
 import timber.log.Timber
-import kotlin.coroutines.CoroutineContext
 
 typealias ProgressCallBack = (
     download: Download
