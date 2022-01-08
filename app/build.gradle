@@ -116,7 +116,6 @@ dependencies {
 
     implementation "io.insert-koin:koin-android:$Versions.koin"
     implementation "io.insert-koin:koin-androidx-compose:$Versions.koin"
-    implementation "io.insert-koin:koin-androidx-workmanager:$Versions.koin"
 
     implementation "com.jakewharton.timber:timber:$Versions.timber"
 
