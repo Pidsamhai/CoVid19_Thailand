@@ -3,6 +3,7 @@ package com.github.pidsamhai.covid19thailand.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import com.github.pidsamhai.covid19thailand.R
 import com.github.pidsamhai.covid19thailand.appwidget.ThaiWidgetConfigureVM
 import com.github.pidsamhai.covid19thailand.appwidget.WorldWidgetConfigureVM
@@ -42,7 +43,9 @@ val databaseModule = module {
     single(named("widgetPref")) { getWidgetPref(androidApplication()) }
     single { getDefaultPref(get()) }
     single<LastFetch> { LastFetchImpl(get()) }
-
+    single(named("defaultPref")) {
+        PreferenceManager.getDefaultSharedPreferences(androidApplication())
+    }
 }
 
 val repositoryModule = module {
@@ -58,7 +61,7 @@ val viewModelModule = module {
     viewModel { ToDayViewModel(get(), get(), get()) }
     viewModel { TimeLineViewModel(get()) }
     viewModel { WorldWideModel(get(), get()) }
-    viewModel { UpdateDialogVM(get(), get()) }
+    viewModel { UpdateDialogVM(get(), get(), get(named("defaultPref"))) }
     viewModel { DownloadDialogVM(get(), get(), get()) }
     viewModel { AboutPageVM(get()) }
     viewModel { ThaiWidgetConfigureVM(get(), get(named("widgetPref"))) }

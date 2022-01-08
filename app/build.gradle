@@ -157,6 +157,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-config-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
+    /* Preference */
+    implementation "androidx.preference:preference:$Versions.preference"
+    implementation "androidx.preference:preference-ktx:$Versions.preference"
     /**
      * Fix JDK 11 Compile Error
      */
