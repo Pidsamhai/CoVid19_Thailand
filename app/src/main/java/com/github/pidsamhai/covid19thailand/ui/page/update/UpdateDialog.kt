@@ -85,6 +85,7 @@ fun UpdateDialogContent(
                 Column(
                     modifier = Modifier
                         .verticalScroll(scrollState)
+                        .weight(1f, false)
                         .padding(horizontal = 24.dp)
                 ) {
                     MarkwonWidget(
