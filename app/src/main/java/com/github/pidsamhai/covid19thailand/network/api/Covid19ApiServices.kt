@@ -1,9 +1,9 @@
 package com.github.pidsamhai.covid19thailand.network.api
 
 import com.github.pidsamhai.covid19thailand.BuildConfig
-import com.github.pidsamhai.covid19thailand.network.response.ddc.TodayResponse
 import com.github.pidsamhai.covid19thailand.network.response.ddc.TimeLine
 import com.github.pidsamhai.covid19thailand.network.response.ddc.TodayByProvinceResponse
+import com.github.pidsamhai.covid19thailand.network.response.ddc.TodayResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

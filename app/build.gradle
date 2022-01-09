@@ -157,9 +157,18 @@ dependencies {
     implementation 'com.google.firebase:firebase-config-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
+    /* Glance Widget */
+    implementation 'androidx.glance:glance:1.0.0-alpha01'
+    implementation 'androidx.glance:glance-appwidget:1.0.0-alpha01'
+    implementation 'androidx.glance:glance-appwidget-proto:1.0.0-alpha01'
+
+    /* Work Manager */
+    implementation "androidx.work:work-runtime-ktx:$Versions.work_manager"
+
     /* Preference */
     implementation "androidx.preference:preference:$Versions.preference"
     implementation "androidx.preference:preference-ktx:$Versions.preference"
+
     /**
      * Fix JDK 11 Compile Error
      */

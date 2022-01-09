@@ -10,7 +10,6 @@ import com.github.pidsamhai.covid19thailand.network.api.CoVid19RapidApiServices
 import com.github.pidsamhai.covid19thailand.network.api.Covid19ApiServices
 import com.github.pidsamhai.covid19thailand.network.networkBoundResource
 import com.github.pidsamhai.covid19thailand.network.response.ddc.*
-import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Country
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -55,26 +54,39 @@ class RepositoryImpl(
     )
 
     override fun getStatic(country: String): Flow<Result<Static>> = networkBoundResource(
-        query = { database.rapidDao.getStaticX(country) },
-        saveFetchResult = {
+        loadFromDb = { database.rapidDao.getStaticX(country) },
+        saveCallResult = {
             database.rapidDao.upSert(it.apply {
                 it.pk = country
             })
         },
-        fetch = {
-            rapidApiServices.getStatic(country)
+        createCall = {
+            try {
+                ApiResponse.Success(rapidApiServices.getStatic(country))
+            } catch (e: Exception) {
+                Timber.e(e)
+                ApiResponse.Error(e)
+            }
         }
     )
 
     override fun getTodayFlow(): Flow<Result<Today>> = networkBoundResource(
-        query = { database.todayDao.hashData() },
-        saveFetchResult = {
-            it.today?.let { it1 -> database.todayDao.upSert(it1) }
-            lastFetch.saveLastFetchToday()
+        loadFromDb = { withContext(Dispatchers.IO) { database.todayDao.hashData() } },
+        saveCallResult = {
+            withContext(Dispatchers.IO) {
+                it.today?.let { it1 -> database.todayDao.upSert(it1) }
+            }
         },
         shouldFetch = { lastFetch.shouldFetchToday || it == null },
-        fetch = {
-            covid19ApiServices.getToDay()
+        createCall = {
+            try {
+                ApiResponse.Success(covid19ApiServices.getToDay()).also {
+                    lastFetch.saveLastFetchToday()
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+                ApiResponse.Error(e)
+            }
         }
     )
 
@@ -108,25 +120,26 @@ class RepositoryImpl(
             }
         )
 
-    override fun getTodayByProvinces(forceRefresh: Boolean): Flow<Result<List<TodayByProvince>>> = networkBoundResource(
-        loadFromDb = { withContext(Dispatchers.IO) { database.todayByProvince.getTodayByProvinces() } },
-        saveCallResult = {
-            withContext(Dispatchers.IO) {
-                database.todayByProvince.upSert(it)
-            }
-        },
-        shouldFetch = { (lastFetch.shouldFetchTodayByProvince || it == null) || forceRefresh },
-        createCall = {
-            try {
-                ApiResponse.Success(covid19ApiServices.getTodayCaseByProvince()).also {
-                    lastFetch.saveLastFetchTodayByProvince()
+    override fun getTodayByProvinces(forceRefresh: Boolean): Flow<Result<List<TodayByProvince>>> =
+        networkBoundResource(
+            loadFromDb = { withContext(Dispatchers.IO) { database.todayByProvince.getTodayByProvinces() } },
+            saveCallResult = {
+                withContext(Dispatchers.IO) {
+                    database.todayByProvince.upSert(it)
                 }
-            } catch (e: Exception) {
-                Timber.e(e)
-                ApiResponse.Error(e)
+            },
+            shouldFetch = { (lastFetch.shouldFetchTodayByProvince || it == null) || forceRefresh },
+            createCall = {
+                try {
+                    ApiResponse.Success(covid19ApiServices.getTodayCaseByProvince()).also {
+                        lastFetch.saveLastFetchTodayByProvince()
+                    }
+                } catch (e: Exception) {
+                    Timber.e(e)
+                    ApiResponse.Error(e)
+                }
             }
-        }
-    )
+        )
 
     override fun getTimeLineLiveData(): LiveData<Result<TimeLine>> = networkBoundResource(
         loadFromDb = { withContext(Dispatchers.IO) { database.timeLineDao.getTimeLine() } },

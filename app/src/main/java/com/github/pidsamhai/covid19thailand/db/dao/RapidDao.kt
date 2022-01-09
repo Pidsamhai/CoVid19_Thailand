@@ -41,7 +41,7 @@ interface RapidDao {
     fun getStaticReal(country: String): LiveData<Static>
 
     @Query("SELECT * FROM rapid_static WHERE pk = :country")
-    fun getStaticX(country: String): Flow<Static?>
+    fun getStaticX(country: String): Static
 
     @Query("SELECT * FROM rapid_statics")
     fun getStaticsX(): List<Datas>

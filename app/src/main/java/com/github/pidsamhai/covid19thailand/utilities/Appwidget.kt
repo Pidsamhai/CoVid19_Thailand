@@ -1,13 +1,10 @@
 package com.github.pidsamhai.covid19thailand.utilities
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import androidx.compose.runtime.Composable
 import timber.log.Timber
 import java.util.*
 

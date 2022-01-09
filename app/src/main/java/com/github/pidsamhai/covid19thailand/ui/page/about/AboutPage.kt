@@ -74,11 +74,12 @@ private fun AboutPageContent(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Image(
+                AndroidView(
                     modifier = Modifier.size(60.dp),
-                    painter = painterResource(id = R.drawable.ic_logo_ddc),
-                    contentDescription = null
-                )
+                    factory = { ImageView(it) }
+                ) {
+                    it.setImageResource(R.drawable.ic_logo_ddc)
+                }
 
                 Image(
                     painter = painterResource(id = R.drawable.ic_rapid_logo),

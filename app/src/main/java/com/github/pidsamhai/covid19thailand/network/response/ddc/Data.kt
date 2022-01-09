@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
 import com.github.pidsamhai.covid19thailand.utilities.StatusColors
 import com.github.pidsamhai.covid19thailand.utilities.StatusTexts
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 @Keep
 @Entity(tableName = "timeline_data")

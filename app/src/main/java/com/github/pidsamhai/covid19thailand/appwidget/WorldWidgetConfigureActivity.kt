@@ -2,6 +2,7 @@ package com.github.pidsamhai.covid19thailand.appwidget
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.lifecycleScope
 import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
@@ -25,9 +26,10 @@ class WorldWidgetConfigureActivity : BaseWidgetConfigureActivity<Static, String>
                     adapter.addAll(listItem)
                     adapter.notifyDataSetChanged()
                     spinner.setSelection(
-                        listItem.indexOf(vm.getSetting(appWidgetId))
+                        listItem.indexOf(vm.getConfig(appWidgetId)?.location)
                     )
                 }
+                else -> Unit
             }
         }
     }
@@ -57,18 +59,24 @@ class WorldWidgetConfigureActivity : BaseWidgetConfigureActivity<Static, String>
 
     override fun createWidget(data: Static) {
         val country = data.static?.country ?: return
-        vm.saveWidgetSetting(appWidgetId, country)
-        val appWidgetManager = AppWidgetManager.getInstance(this)
-        WorldWideAppWidgetProvider.updateWidget(
-            this,
-            appWidgetManager,
-            appWidgetId,
-            data
-        )
-        val resultValue = Intent()
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        setResult(RESULT_OK, resultValue)
-        finish()
+        val config = WidgetConfig(location = country, type = "world")
+        vm.saveWidgetSetting(appWidgetId, config)
+        val appWidgetManager = GlanceAppWidgetManager(this)
+        lifecycleScope.launchWhenCreated {
+            val glanceId = appWidgetManager.getGlanceIds(WorldAppWidget::class.java)
+                .find { it.toString().contains("$appWidgetId") }
+            if (glanceId == null) {
+                finish()
+            }
+            WorldAppWidget(data).update(
+                this@WorldWidgetConfigureActivity.baseContext,
+                glanceId!!
+            )
+            val resultValue = Intent()
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            setResult(RESULT_OK, resultValue)
+            finish()
+        }
     }
 
     private fun Collection<String>.toListItem(): MutableList<String> {

@@ -11,11 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.lifecycle.lifecycleScope
 import com.github.pidsamhai.covid19thailand.R
-import com.github.pidsamhai.covid19thailand.network.response.ddc.TodayByProvince
 import com.github.pidsamhai.covid19thailand.utilities.APPWIDGET_EXTRA_REFRESH
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 abstract class BaseWidgetConfigureActivity<T : Any, S : Any?> : AppCompatActivity() {
     protected val adapter: ArrayAdapter<String> by lazy {
@@ -60,6 +59,9 @@ abstract class BaseWidgetConfigureActivity<T : Any, S : Any?> : AppCompatActivit
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish()
         }
+
+        Timber.d("Prepare Create widget extras ${intent.extras?.keySet()?.map { intent.extras?.get(it) }}")
+        Timber.d("Prepare Create widget id $appWidgetId")
 
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

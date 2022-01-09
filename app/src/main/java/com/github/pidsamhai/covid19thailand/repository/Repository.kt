@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import com.github.pidsamhai.covid19thailand.db.Result
 import com.github.pidsamhai.covid19thailand.network.ApiResponse
 import com.github.pidsamhai.covid19thailand.network.response.ddc.*
-import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Country
 import com.github.pidsamhai.covid19thailand.network.response.rapid.covid193.Static
 import kotlinx.coroutines.flow.Flow
 

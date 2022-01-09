@@ -3,8 +3,8 @@ package com.github.pidsamhai.covid19thailand.network.response.github
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.google.gson.annotations.SerializedName
+import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.navelplace.jsemver.Version
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize

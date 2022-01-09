@@ -4,6 +4,10 @@
     <color name="recovered">#046034</color>
     <color name="hospitalized">#179c9b</color>
     <color name="deaths">#666</color>
+    <color name="new_case">#E53935</color>
     <color name="hint">#99666666</color>
     <color name="windowBackground">#FFFFFFFF</color>
+    <color name="widget_bg">#FFFFFF</color>
+    <color name="widget_text">#000000</color>
+    <color name="widget_text_death">#666</color>
 </resources>

@@ -1,7 +1,7 @@
 package com.github.pidsamhai.covid19thailand.appwidget
 
-import androidx.appcompat.app.AlertDialog
 import android.content.Context
+import androidx.appcompat.app.AlertDialog
 import com.github.pidsamhai.covid19thailand.R
 
 @Suppress("FunctionName")
