@@ -5,6 +5,8 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.github.pidsamhai.covid19thailand.R
+import com.github.pidsamhai.covid19thailand.ui.dialog.UpdateChannelDialogPicker
 import com.github.pidsamhai.covid19thailand.ui.page.update.UpdateDialog
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.AboutPageVM
 import org.koin.androidx.compose.getViewModel
@@ -44,11 +47,19 @@ private fun AboutPageContent(
     clearDatabase: () -> Unit = { }
 ) {
     var showUpdateDialog by remember { mutableStateOf(false) }
+    var showUpdateChannelDialog by remember { mutableStateOf(false) }
 
     if (showUpdateDialog) {
         UpdateDialog(
             showDialog = showUpdateDialog,
             onDismiss = { showUpdateDialog = false }
+        )
+    }
+
+    if (showUpdateChannelDialog) {
+        UpdateChannelDialogPicker(
+            showDialog = showUpdateChannelDialog,
+            onDismiss = { showUpdateChannelDialog = false }
         )
     }
 
@@ -92,12 +103,19 @@ private fun AboutPageContent(
                 Text(text = "Copy right Pidsamhai 2020")
             }
 
-            Button(onClick = { openUpdateDialog() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_update),
-                    contentDescription = null
-                )
-                Text(text = stringResource(id = R.string.check_update).uppercase())
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(onClick = { openUpdateDialog() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_update),
+                        contentDescription = null
+                    )
+                    Text(text = stringResource(id = R.string.check_update).uppercase())
+                }
+                IconButton(onClick = { showUpdateChannelDialog = true }) {
+                    Icon(imageVector = Icons.Rounded.Settings, contentDescription = "Setting")
+                }
             }
 
             Button(onClick = { clearDatabase() }) {

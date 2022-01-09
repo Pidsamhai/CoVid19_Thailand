@@ -18,11 +18,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.github.pidsamhai.covid19thailand.BuildConfig
 import com.github.pidsamhai.covid19thailand.network.Download
 import com.github.pidsamhai.covid19thailand.ui.viewmodel.UpdateDialogVM
 import com.github.pidsamhai.covid19thailand.ui.widget.MarkwonWidget
-import com.navelplace.jsemver.Version
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -43,9 +41,6 @@ fun UpdateDialogContent(
     downLoad: () -> Unit = { },
     updateDialogVM: UpdateDialogVM = getViewModel()
 ) {
-
-    val currentVersion = Version(BuildConfig.VERSION_NAME)
-
     val scrollState = rememberScrollState()
 
     SideEffect {
@@ -69,11 +64,11 @@ fun UpdateDialogContent(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = if (release == null) "Checking update" else "Update found",
+                    text = if (release?.isNewVersion == true) "Update found" else "Checking update",
                     style = MaterialTheme.typography.h6,
                     fontSize = 20.sp
                 )
-                if (release != null) {
+                if (release?.isNewVersion == true) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
@@ -86,11 +81,10 @@ fun UpdateDialogContent(
                 }
             }
 
-            if (release != null && download == null) {
+            if (download == null && release?.isNewVersion == true) {
                 Column(
                     modifier = Modifier
                         .verticalScroll(scrollState)
-                        .weight(1f)
                         .padding(horizontal = 24.dp)
                 ) {
                     MarkwonWidget(
@@ -137,7 +131,7 @@ fun UpdateDialogContent(
                 horizontalArrangement = Arrangement.End
             ) {
                 if (release != null) {
-                    if(currentVersion.olderThan(Version(release?.tagName!!))) {
+                    if(release?.isNewVersion == true) {
                         TextButton(onClick = {
                             updateDialogVM.saveReleaseItem()
                             downLoad()

@@ -25,4 +25,5 @@ ext.Versions = [
         expresso_core: "3.4.0",
         firebase_bom: "29.0.3",
         work_manager: "2.7.1",
+        preference: "1.1.1"
 ]

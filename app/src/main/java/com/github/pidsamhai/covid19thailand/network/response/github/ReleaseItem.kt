@@ -4,6 +4,9 @@ package com.github.pidsamhai.covid19thailand.network.response.github
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import com.github.pidsamhai.covid19thailand.BuildConfig
+import com.navelplace.jsemver.Version
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Keep
@@ -45,4 +48,10 @@ data class ReleaseItem(
     val url: String? = null,
     @SerializedName("zipball_url")
     val zipballUrl: String? = null
-) : Parcelable
+) : Parcelable {
+    @IgnoredOnParcel
+    private val currentVersion = Version(BuildConfig.VERSION_NAME)
+    @IgnoredOnParcel
+    val isNewVersion: Boolean
+        get() = currentVersion.olderThan(Version(tagName!!))
+}
